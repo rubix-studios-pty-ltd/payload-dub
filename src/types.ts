@@ -117,9 +117,19 @@ export interface DubTypes {
   webhookIds?: null | string[]
 }
 
-export const DubColors = ['blue', 'brown', 'green', 'pink', 'purple', 'red', 'yellow'] as const
+export const DubColors = {
+  Blue: 'blue',
+  Brown: 'brown',
+  Green: 'green',
+  Pink: 'pink',
+  Purple: 'purple',
+  Red: 'red',
+  Yellow: 'yellow',
+} as const
 
-export type DubTagColor = (typeof DubColors)[number]
+export type ClosedEnum<T> = T[keyof T]
+
+export type DubTagColor = ClosedEnum<typeof DubColors>
 
 export interface DubTagSchema {
   color?: DubTagColor

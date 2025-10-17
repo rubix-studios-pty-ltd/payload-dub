@@ -18,7 +18,7 @@ export const payloadDub =
 
     const dub = new Dub({ token: pluginOptions.dubApiKey })
 
-    const validColors = new Set(DubColors)
+    const validColors = new Set(Object.values(DubColors))
 
     const normalized: {
       color?: DubTagColor
@@ -117,7 +117,7 @@ const createDubHook =
 
     try {
       const allTags = await dub.tags.list()
-      const existingTag = allTags.find((t: DubTagSchema) => t.name === slug)
+      const existingTag = allTags.find((tag: DubTagSchema) => tag.name === slug)
 
       if (!existingTag) {
         await dub.tags.create({
@@ -125,7 +125,7 @@ const createDubHook =
           ...(color ? { color } : {}),
         })
       } else if (color && existingTag.color !== color) {
-        await dub.tags.update(existingTag.id, { color })
+        await dub.tags.update(existingTag.id, { name: slug, color })
       }
 
       const response = await dub.links.upsert(linkData)
