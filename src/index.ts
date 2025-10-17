@@ -105,9 +105,7 @@ const createDubHook =
     operation,
     req: { payload },
   }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (context?.createDub === false) {
-      return doc
-    }
+    if (context.createDub === false) {return}
 
     if (operation === 'create' || operation === 'update') {
       const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
