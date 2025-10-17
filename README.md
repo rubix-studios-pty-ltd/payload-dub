@@ -3,8 +3,12 @@
 A Payload CMS plugin by Rubix Studios that integrates with Dub to automatically create and manage shortlinks for your content.
 This plugin synchronizes your Payload collections with Dub, ensuring that every published document gets a corresponding shortlink, tag, and color configuration.
 
-[![npm version](https://img.shields.io/npm/v/@rubixstudios/payload-typesense.svg)](https://www.npmjs.com/package/@rubixstudios/payload-dub)
+[![npm version](https://img.shields.io/npm/v/@rubixstudios/payload-dub.svg)](https://www.npmjs.com/package/@rubixstudios/payload-dub)
 ![Release](https://github.com/rubix-studios-pty-ltd/payload-dub/actions/workflows/release.yml/badge.svg)
+
+Dub is the modern, open-source link attribution platform for short links, conversion tracking, and affiliate programs.
+
+Create a Dub account: [Dub](https://refer.dub.co/vincent-vu)
 
 ## Installation
 
