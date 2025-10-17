@@ -1,21 +1,14 @@
 {
-  "$schema": "https://json.schemastore.org/swcrc",
-  "sourceMaps": true,
   "jsc": {
-    "target": "esnext",
     "parser": {
       "syntax": "typescript",
       "tsx": true,
-      "dts": true
+      "decorators": true
     },
+    "target": "esnext",
     "transform": {
-      "react": {
-        "runtime": "automatic",
-        "pragmaFrag": "React.Fragment",
-        "throwIfNamespace": true,
-        "development": false,
-        "useBuiltins": true
-      }
+      "legacyDecorator": true,
+      "decoratorMetadata": true
     }
   },
   "module": {

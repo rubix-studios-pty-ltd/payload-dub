@@ -1,113 +1,137 @@
-import type { CollectionSlug, Config } from 'payload'
+import { Dub } from 'dub'
+import { type CollectionAfterChangeHook, type Config, type Field } from 'payload'
 
-import { customEndpointHandler } from './endpoints/customEndpointHandler.js'
-
-export type PayloadDubConfig = {
-  /**
-   * List of collections to add a custom field
-   */
-  collections?: Partial<Record<CollectionSlug, true>>
-  disabled?: boolean
-}
+import {
+  DubColors,
+  type DubConfig,
+  type DubTagColor,
+  type DubTagSchema,
+  type DubTypes,
+} from './types.js'
 
 export const payloadDub =
-  (pluginOptions: PayloadDubConfig) =>
+  (pluginOptions: DubConfig) =>
   (config: Config): Config => {
-    if (!config.collections) {
-      config.collections = []
-    }
-
-    config.collections.push({
-      slug: 'plugin-collection',
-      fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-      ],
-    })
-
-    if (pluginOptions.collections) {
-      for (const collectionSlug in pluginOptions.collections) {
-        const collection = config.collections.find(
-          (collection) => collection.slug === collectionSlug,
-        )
-
-        if (collection) {
-          collection.fields.push({
-            name: 'addedByPlugin',
-            type: 'text',
-            admin: {
-              position: 'sidebar',
-            },
-          })
-        }
-      }
-    }
-
-    /**
-     * If the plugin is disabled, we still want to keep added collections/fields so the database schema is consistent which is important for migrations.
-     * If your plugin heavily modifies the database schema, you may want to remove this property.
-     */
-    if (pluginOptions.disabled) {
+    if (!pluginOptions.collections || pluginOptions.disabled) {
       return config
     }
 
-    if (!config.endpoints) {
-      config.endpoints = []
-    }
+    const dub = new Dub({ token: pluginOptions.dubApiKey })
 
-    if (!config.admin) {
-      config.admin = {}
-    }
+    const validColors = new Set(DubColors)
 
-    if (!config.admin.components) {
-      config.admin.components = {}
-    }
+    const normalized: {
+      color?: DubTagColor
+      docs: string
+      slugOverride?: string
+    }[] = pluginOptions.collections.map((collection) => {
+      if (typeof collection === 'string') {
+        return { docs: collection }
+      }
 
-    if (!config.admin.components.beforeDashboard) {
-      config.admin.components.beforeDashboard = []
-    }
+      const safeColor =
+        typeof collection.color === 'string' && validColors.has(collection.color)
+          ? collection.color
+          : undefined
 
-    config.admin.components.beforeDashboard.push(
-      `payload-dub/client#BeforeDashboardClient`,
-    )
-    config.admin.components.beforeDashboard.push(
-      `payload-dub/rsc#BeforeDashboardServer`,
-    )
-
-    config.endpoints.push({
-      handler: customEndpointHandler,
-      method: 'get',
-      path: '/my-plugin-endpoint',
+      return {
+        color: safeColor,
+        docs: collection.docs,
+        slugOverride: collection.slugOverride,
+      }
     })
 
-    const incomingOnInit = config.onInit
+    normalized.forEach(({ color, docs, slugOverride }) => {
+      const targetSlug = slugOverride || docs
+      const collection = config.collections?.find((col) => col.slug === docs)
 
-    config.onInit = async (payload) => {
-      // Ensure we are executing any existing onInit functions before running our own.
-      if (incomingOnInit) {
-        await incomingOnInit(payload)
+      if (!collection) {
+        return
       }
 
-      const { totalDocs } = await payload.count({
-        collection: 'plugin-collection',
-        where: {
-          id: {
-            equals: 'seeded-by-plugin',
-          },
-        },
-      })
+      const hasField = collection.fields.some(
+        (field: Field) => 'name' in field && field.name === 'shortLink'
+      )
 
-      if (totalDocs === 0) {
-        await payload.create({
-          collection: 'plugin-collection',
-          data: {
-            id: 'seeded-by-plugin',
-          },
+      if (!hasField) {
+        collection.fields.push({
+          name: 'shortLink',
+          type: 'text',
+          admin: { position: 'sidebar', readOnly: true },
+          label: 'Short link',
         })
       }
-    }
+
+      const existingHooks = collection.hooks?.afterChange || []
+      collection.hooks = {
+        ...collection.hooks,
+        afterChange: [
+          ...existingHooks,
+          createDubHook({
+            slug: targetSlug,
+            color,
+            dub,
+            siteUrl: pluginOptions.siteUrl,
+          }),
+        ],
+      }
+    })
 
     return config
+  }
+
+const createDubHook =
+  ({
+    slug,
+    color,
+    dub,
+    siteUrl,
+  }: {
+    color?: DubTagColor
+    dub: Dub
+    siteUrl: string
+    slug: string
+  }): CollectionAfterChangeHook =>
+  async ({ collection, doc, req: { payload } }: Parameters<CollectionAfterChangeHook>[0]) => {
+    if (doc._status !== 'published') {
+      return doc
+    }
+
+    const externalId = `ext_${slug}_${doc.id}`
+    const destinationUrl = `${siteUrl}/${slug}/${doc.slug}`
+
+    const linkData: DubTypes = {
+      externalId,
+      tagNames: [slug],
+      url: destinationUrl,
+    }
+
+    try {
+      const allTags = await dub.tags.list()
+      const existingTag = allTags.find((t: DubTagSchema) => t.name === slug)
+
+      if (!existingTag) {
+        await dub.tags.create({
+          name: slug,
+          ...(color ? { color } : {}),
+        })
+      } else if (color && existingTag.color !== color) {
+        await dub.tags.update(existingTag.id, { color })
+      }
+
+      const response = await dub.links.upsert(linkData)
+
+      await payload.update({
+        id: doc.id,
+        collection: collection.slug,
+        data: {
+          shortLink: response.shortLink ?? response.url,
+        },
+        overrideAccess: true,
+      })
+    } catch (err) {
+      payload.logger.error(`Link creation failed for ${slug}:`, err)
+    }
+
+    return doc
   }
