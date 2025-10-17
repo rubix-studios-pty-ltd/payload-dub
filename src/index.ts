@@ -70,10 +70,10 @@ export const payloadDub =
           createDubHook({
             slug: targetSlug,
             color,
-			domain: pluginOptions.domain,
             dub,
-			siteUrl: pluginOptions.siteUrl,
-			tenantId: pluginOptions.tenantId,
+            siteUrl: pluginOptions.siteUrl,
+            ...(pluginOptions.domain ? { domain: pluginOptions.domain } : {}),
+            ...(pluginOptions.tenantId ? { tenantId: pluginOptions.tenantId } : {}),
           }),
         ],
       }
@@ -86,24 +86,24 @@ const createDubHook =
   ({
     slug,
     color,
-	domain,
+    domain,
     dub,
     siteUrl,
-	tenantId,
+    tenantId,
   }: {
     color?: DubTagColor
-	domain?: string
+    domain?: string
     dub: Dub
     siteUrl: string
     slug: string
-	tenantId?: string
+    tenantId?: string
   }): CollectionAfterChangeHook =>
   async ({ collection, doc, req: { payload } }: Parameters<CollectionAfterChangeHook>[0]) => {
     if (doc._status !== 'published') {
       return doc
     }
 
-	const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
+    const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
     const externalId = `ext_${slug}_${doc.id}`
     const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
@@ -111,8 +111,8 @@ const createDubHook =
       externalId,
       tagNames: [slug],
       url: destinationUrl,
-	  ...(domain ? { domain } : {}),
-	  ...(tenantId ? { tenantId: tenant } : {}),
+      ...(domain ? { domain } : {}),
+      ...(tenantId ? { tenantId: tenant } : {}),
     }
 
     try {

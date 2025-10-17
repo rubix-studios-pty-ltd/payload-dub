@@ -32,7 +32,7 @@ export default buildConfig({
       dubApiKey: process.env.DUB_API_KEY || '',
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       domain: 'mycustomdomain.com', // Optional: custom Dub domain
-      tenantId: '12345' // Optional: tenant identifier for Dub workspace
+      tenantId: '12345', // Optional: tenant identifier for Dub workspace
     }),
   ],
 })
@@ -60,4 +60,3 @@ For support or inquiries:
 
 Rubix Studios Pty. Ltd.  
 [https://rubixstudios.com.au](https://rubixstudios.com.au)
-

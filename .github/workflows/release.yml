@@ -30,9 +30,6 @@ jobs:
       - name: Lint project
         run: pnpm lint
 
-      - name: Prettier
-        run: pnpm format
-
   release:
     runs-on: ubuntu-latest
     needs: [lint]
