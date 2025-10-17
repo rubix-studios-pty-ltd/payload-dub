@@ -138,6 +138,8 @@ export type DubCollection =
 export type DubConfig = {
   collections?: DubCollection[]
   disabled?: boolean
+  domain?: string
   dubApiKey: string
   siteUrl: string
+  tenantId?: string
 }
