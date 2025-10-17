@@ -100,10 +100,15 @@ const createDubHook =
   }): CollectionAfterChangeHook =>
   async ({
     collection,
+    context,
     doc,
     operation,
     req: { payload },
   }: Parameters<CollectionAfterChangeHook>[0]) => {
+    if (context?.createDub === false) {
+      return doc
+    }
+
     if (operation === 'create' || operation === 'update') {
       const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
       const externalId = `ext_${slug}_${doc.id}`
@@ -136,6 +141,7 @@ const createDubHook =
           await payload.update({
             id: doc.id,
             collection: collection.slug,
+            context: { createDub: false },
             data: {
               shortLink: response.shortLink ?? response.url,
             },
