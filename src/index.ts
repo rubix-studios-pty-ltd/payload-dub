@@ -100,16 +100,11 @@ const createDubHook =
   }): CollectionAfterChangeHook =>
   async ({
     collection,
-    context,
     doc,
     operation,
-    req: { payload },
+    req: { context, payload },
   }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (context?.createDub === false) {
-      return doc
-    }
-
-    if (operation === 'create' || operation === 'update') {
+    if ((operation === 'create' || operation === 'update') && context.createDub !== false) {
       const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
       const externalId = `ext_${slug}_${doc.id}`
       const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
