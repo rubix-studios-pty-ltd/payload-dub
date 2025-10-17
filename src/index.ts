@@ -98,7 +98,7 @@ const createDubHook =
     }
 
     const externalId = `ext_${slug}_${doc.id}`
-    const destinationUrl = `${siteUrl}/${slug}/${doc.slug}`
+    const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
     const linkData: DubTypes = {
       externalId,

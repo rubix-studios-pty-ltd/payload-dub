@@ -1,7 +1,7 @@
 {
   "name": "@rubixstudios/payload-dub",
   "version": "1.0.0",
-  "description": "A Payload CMS plugin that uses Dub to auto-create and manage shortlinks for published documents.",
+  "description": "A Payload CMS plugin that integrates with Dub to automatically create and manage shortlinks for your content.",
   "license": "MIT",
   "author": "Rubix Studios <hello@rubixstudios.com.au> (https://rubixstudios.com.au)",
   "homepage": "https://rubixstudios.com.au",

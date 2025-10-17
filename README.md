@@ -1,6 +1,6 @@
 # PayloadCMS + Dub Plugin
 
-A Payload CMS plugin by Rubix Studios that integrates with Dub to automatically create and manage shortlinks for your content.
+A Payload CMS plugin that integrates with Dub to automatically create and manage shortlinks for your content.
 This plugin synchronizes your Payload collections with Dub, ensuring that every published document gets a corresponding shortlink, tag, and color configuration.
 
 [![npm version](https://img.shields.io/npm/v/@rubixstudios/payload-dub.svg)](https://www.npmjs.com/package/@rubixstudios/payload-dub)
