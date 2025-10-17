@@ -98,50 +98,53 @@ const createDubHook =
     slug: string
     tenantId?: string
   }): CollectionAfterChangeHook =>
-  async ({ collection, doc, req: { payload } }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (doc._status !== 'published') {
-      return doc
-    }
+  async ({
+    collection,
+    doc,
+    operation,
+    req: { payload },
+  }: Parameters<CollectionAfterChangeHook>[0]) => {
+    if (operation === 'create' || operation === 'update') {
+      const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
+      const externalId = `ext_${slug}_${doc.id}`
+      const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
-    const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
-    const externalId = `ext_${slug}_${doc.id}`
-    const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
-
-    const linkData: DubTypes = {
-      externalId,
-      tagNames: [slug],
-      url: destinationUrl,
-      ...(domain ? { domain } : {}),
-      ...(tenantId ? { tenantId: tenant } : {}),
-    }
-
-    try {
-      const allTags = await dub.tags.list()
-      const existingTag = allTags.find((tag: DubTagSchema) => tag.name === slug)
-
-      if (!existingTag) {
-        await dub.tags.create({
-          name: slug,
-          ...(color ? { color } : {}),
-        })
-      } else if (color && existingTag.color !== color) {
-        await dub.tags.update(existingTag.id, { name: slug, color })
+      const linkData: DubTypes = {
+        externalId,
+        tagNames: [slug],
+        url: destinationUrl,
+        ...(domain ? { domain } : {}),
+        ...(tenantId ? { tenantId: tenant } : {}),
       }
 
-      const response = await dub.links.upsert(linkData)
+      try {
+        const allTags = await dub.tags.list()
+        const existingTag = allTags.find((tag: DubTagSchema) => tag.name === slug)
 
-      if (!doc.shortlink) {
-        await payload.update({
-          id: doc.id,
-          collection: collection.slug,
-          data: {
-            shortLink: response.shortLink ?? response.url,
-          },
-          overrideAccess: true,
-        })
+        if (!existingTag) {
+          await dub.tags.create({
+            name: slug,
+            ...(color ? { color } : {}),
+          })
+        } else if (color && existingTag.color !== color) {
+          await dub.tags.update(existingTag.id, { name: slug, color })
+        }
+
+        const response = await dub.links.upsert(linkData)
+
+        if (!doc.shortlink) {
+          await payload.update({
+            id: doc.id,
+            collection: collection.slug,
+            data: {
+              shortLink: response.shortLink ?? response.url,
+            },
+            overrideAccess: true,
+          })
+        }
+      } catch (err) {
+        payload.logger.error(`Link creation failed for ${slug}:`, err)
       }
-    } catch (err) {
-      payload.logger.error(`Link creation failed for ${slug}:`, err)
     }
 
     return doc
