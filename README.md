@@ -8,7 +8,7 @@ This plugin synchronizes your Payload collections with Dub, ensuring that every 
 
 Dub is the modern, open-source link attribution platform for short links, conversion tracking, and affiliate programs.
 
-Create a Dub account: [Dub](https://refer.dub.co/vincent-vu)
+Create a Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
 ## Installation
 
