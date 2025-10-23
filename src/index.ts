@@ -135,19 +135,22 @@ const createDubHook =
 
         const response = await dub.links.upsert(linkData)
 
-        if (!doc.shortlink) {
+        if (!doc.shortlink || !doc.shortlink.trim()) {
           await payload.update({
             id: doc.id,
             collection: collection.slug,
             context: { createDub: false },
             data: {
-              shortLink: response.shortLink ?? response.url,
+              shortLink: response.url ?? response.shortLink,
             },
             overrideAccess: true,
           })
         }
       } catch (err) {
-        payload.logger.error(`Link creation failed for ${slug}:`, err)
+        payload.logger.error({
+          error: err instanceof Error ? err.message : String(err),
+          msg: `Link creation failed for ${slug}`,
+        })
       }
     }
 
