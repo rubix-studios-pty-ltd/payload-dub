@@ -141,7 +141,7 @@ const createDubHook =
             collection: collection.slug,
             context: { createDub: false },
             data: {
-              shortLink: response.url ?? response.shortLink,
+              shortLink: response.shortLink ?? '',
             },
             overrideAccess: true,
           })
