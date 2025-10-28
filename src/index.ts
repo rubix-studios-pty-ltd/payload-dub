@@ -106,21 +106,25 @@ const createDubHook =
     previousDoc,
     req: { payload },
   }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (
-      context?.skipDubHook ||
-      doc._status !== 'published' ||
-      (operation === 'update' && previousDoc?.shortLink && previousDoc.slug === doc.slug)
-    ) {
+    if (context?.skipDubHook) {
       return doc
     }
 
-    if ((operation === 'create' || operation === 'update') && doc.id && doc.slug) {
-      let tenant: string | undefined = undefined
+    if (doc._status !== 'published' || !doc.id || !doc.slug) {
+      return doc
+    }
+
+    if (operation === 'create' || operation === 'update') {
+      let tenant: string | undefined
 
       if (tenantId) {
-        tenant = tenantId.startsWith('user_')
-          ? tenantId
-          : `user_${tenantId}`
+        if (tenantId.startsWith('user_')) {
+          tenant = tenantId
+        } else {
+          tenant = `user_${tenantId}`
+        }
+      } else {
+        tenant = undefined
       }
 
       const externalId = `ext_${slug}_${doc.id}`
@@ -149,13 +153,16 @@ const createDubHook =
 
         const response = await dub.links.upsert(linkData)
 
-        if (!previousDoc?.shortLink && response.shortLink) {
+        const shortLink = response.shortLink
+        const noShortLink = !previousDoc?.shortLink || previousDoc.shortLink.trim() === ''
+
+        if (noShortLink && shortLink) {
           await payload.update({
             id: doc.id,
             collection: collection.slug,
             context: { skipDubHook: true },
             data: {
-              shortLink: response.shortLink ?? '',
+              shortLink,
             },
             overrideAccess: true,
           })
