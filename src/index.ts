@@ -1,5 +1,5 @@
 import { Dub } from 'dub'
-import { type CollectionAfterChangeHook, type Config, type Field } from 'payload'
+import { type CollectionBeforeChangeHook, type Config, type Field } from 'payload'
 
 import {
   DubColors,
@@ -62,10 +62,10 @@ export const payloadDub =
         })
       }
 
-      const existingHooks = collection.hooks?.afterChange || []
+      const existingHooks = collection.hooks?.beforeChange || []
       collection.hooks = {
         ...collection.hooks,
-        afterChange: [
+        beforeChange: [
           ...existingHooks,
           createDubHook({
             slug: targetSlug,
@@ -97,20 +97,29 @@ const createDubHook =
     siteUrl: string
     slug: string
     tenantId?: string
-  }): CollectionAfterChangeHook =>
+  }): CollectionBeforeChangeHook =>
   async ({
-    collection,
-    context,
-    doc,
+    data,
     operation,
+    originalDoc,
     req: { payload },
-  }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (context.createDub === false) {return}
-
+  }: Parameters<CollectionBeforeChangeHook>[0]) => {
     if (operation === 'create' || operation === 'update') {
-      const tenant = tenantId?.startsWith('user_') ? tenantId : `user_${tenantId}`
-      const externalId = `ext_${slug}_${doc.id}`
-      const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
+
+      if (!data.slug) {
+        return data
+      }
+
+      let tenant: string | undefined = undefined
+
+      if (tenantId) {
+        tenant = tenantId.startsWith('user_')
+          ? tenantId
+          : `user_${tenantId}`
+      }
+
+      const externalId = `ext_${slug}_${data.id}`
+      const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${data.slug}`
 
       const linkData: DubTypes = {
         externalId,
@@ -135,16 +144,8 @@ const createDubHook =
 
         const response = await dub.links.upsert(linkData)
 
-        if (!doc.shortlink || !doc.shortlink.trim()) {
-          await payload.update({
-            id: doc.id,
-            collection: collection.slug,
-            context: { createDub: false },
-            data: {
-              shortLink: response.shortLink ?? '',
-            },
-            overrideAccess: true,
-          })
+        if (!originalDoc?.shortLink && response.shortLink) {
+          data.shortLink = response.shortLink
         }
       } catch (err) {
         payload.logger.error({
@@ -154,5 +155,5 @@ const createDubHook =
       }
     }
 
-    return doc
+    return data
   }
