@@ -8,12 +8,14 @@ export const createDubHook =
     slug,
     domain,
     dub,
+    isPro = false,
     originalSlug,
     siteUrl,
     tenantId,
   }: {
     domain?: string
     dub: Dub
+    isPro?: boolean
     originalSlug: string
     siteUrl: string
     slug: string
@@ -110,10 +112,15 @@ export const createDubHook =
         }
       }
 
-      const folders = await dub.folders.list()
-      let folder = folders.find((folder: DubFolder) => folder.name === originalSlug)
-      if (!folder) {
-        folder = await dub.folders.create({ name: originalSlug })
+      let folderId: string | undefined
+
+      if (isPro === true) {
+        const folders = await dub.folders.list()
+        let folder = folders.find((f: DubFolder) => f.name === originalSlug)
+        if (!folder) {
+          folder = await dub.folders.create({ name: originalSlug })
+        }
+        folderId = folder.id
       }
 
       const tid = tenantId
@@ -183,7 +190,7 @@ export const createDubHook =
 
       const data: DubTypes = {
         externalId,
-        folderId: folder.id,
+       ...(folderId ? { folderId } : {}),
         url,
         ...(dubTagIds.length ? { tagIds: dubTagIds } : {}),
         ...(domain ? { domain } : {}),
