@@ -36,6 +36,17 @@ export const createDubHook =
     }
 
     try {
+      let folderId: string | undefined
+
+      if (isPro === true) {
+        const folders = await dub.folders.list()
+        let folder = folders.find((f: DubFolder) => f.name === originalSlug)
+        if (!folder) {
+          folder = await dub.folders.create({ name: originalSlug })
+        }
+        folderId = folder.id
+      }
+
       const lookup = await payload.find({
         collection: 'dubLinks',
         limit: 1,
@@ -43,8 +54,9 @@ export const createDubHook =
         where: { 'source.value': { equals: doc.id } },
       })
 
-      let linkDoc = lookup.docs[0]
+      let linkDoc = lookup.docs[0] // revert to const after migration
 
+      // Temporary migration script to create missing links
       if (!linkDoc) {
         const legacy = `ext_${slug}_${doc.id}`
         const found = await dub.links.get({ externalId: legacy })
@@ -103,17 +115,6 @@ export const createDubHook =
         }
       }
 
-      let folderId: string | undefined
-
-      if (isPro === true) {
-        const folders = await dub.folders.list()
-        let folder = folders.find((f: DubFolder) => f.name === originalSlug)
-        if (!folder) {
-          folder = await dub.folders.create({ name: originalSlug })
-        }
-        folderId = folder.id
-      }
-
       const tid = tenantId
         ? tenantId.startsWith('user_')
           ? tenantId
@@ -140,28 +141,6 @@ export const createDubHook =
       const dubTagIds =
         dubTagsQuery?.docs?.map((t) => t.tagID).filter((id): id is string => Boolean(id)) ?? []
 
-      const prevPayloadTagIds = Array.isArray(linkDoc?.dubTags)
-        ? linkDoc.dubTags
-            .map((tag) => {
-              if (typeof tag === 'string') {
-                return tag
-              }
-              if (tag && typeof tag.id === 'string') {
-                return tag.id
-              }
-              return undefined
-            })
-            .filter((id): id is string => Boolean(id))
-        : []
-
-      const noTagChange =
-        payloadTagIds.length === prevPayloadTagIds.length &&
-        payloadTagIds.every((id) => prevPayloadTagIds.includes(id))
-
-      if (existingShort && noTagChange) {
-        return doc
-      }
-
       const link =
         linkDoc ||
         (await payload.create({
@@ -176,14 +155,30 @@ export const createDubHook =
         }))
 
       const externalId = link.externalId || `ext_${slug}_${link.id}`
-
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
+
+      let tagMismatch = false
+
+      if (existingShort) {
+        const currentDubTags = await dub.links.get({ externalId })
+        const dubTagIdsCurrent: string[] = Array.isArray(currentDubTags?.tags)
+          ? currentDubTags.tags.map((t) => t.id)
+          : []
+
+        tagMismatch =
+          dubTagIds.length !== dubTagIdsCurrent.length ||
+          !dubTagIds.every((id) => dubTagIdsCurrent.includes(id))
+      }
+
+      if (existingShort && !tagMismatch) {
+        return doc
+      }
 
       const data: DubTypes = {
         externalId,
-       ...(folderId ? { folderId } : {}),
+        ...(folderId ? { folderId } : {}),
+        tagIds: dubTagIds,
         url,
-        ...(dubTagIds.length ? { tagIds: dubTagIds } : {}),
         ...(domain ? { domain } : {}),
         ...(tid ? { tenantId: tid } : {}),
       }
@@ -193,7 +188,8 @@ export const createDubHook =
       const requiresSync =
         !existingShort ||
         existingShort !== updated.shortLink ||
-        !noTagChange
+        tagMismatch ||
+        link.externalId !== externalId
 
       if (requiresSync) {
         await payload.update({
