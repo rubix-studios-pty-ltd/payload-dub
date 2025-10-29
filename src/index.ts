@@ -183,6 +183,7 @@ export const payloadDub =
               slug: targetSlug,
               domain: pluginConfig.domain,
               dub,
+              isPro: pluginConfig.isPro || false,
               originalSlug: collection.slug,
               siteUrl: pluginConfig.siteUrl,
               tenantId: pluginConfig.tenantId,
