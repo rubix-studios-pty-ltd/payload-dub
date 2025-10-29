@@ -1,4 +1,4 @@
-import { type CollectionSlug } from 'payload'
+import { type CollectionConfig, type CollectionSlug, type Field } from 'payload'
 
 export interface DubTypes {
   /** Android destination URL for device targeting. */
@@ -137,9 +137,13 @@ export interface DubTagSchema {
   name: string
 }
 
+export type DubFolder = {
+  id: string
+  name: string
+}
+
 export type DubCollection =
   | {
-      color?: DubTagColor
       docs: CollectionSlug
       slugOverride?: string
     }
@@ -150,6 +154,40 @@ export type DubConfig = {
   disabled?: boolean
   domain?: string
   dubApiKey: string
+  overrides?: {
+    fields?: (args: { defaultFields: Field[] }) => Field[]
+  } & Partial<Omit<CollectionConfig, 'fields'>>
   siteUrl: string
   tenantId?: string
 }
+
+export const SortBy = {
+  Clicks: "clicks",
+  CreatedAt: "createdAt",
+  LastClicked: "lastClicked",
+  SaleAmount: "saleAmount",
+} as const;
+
+export type SortBy = ClosedEnum<typeof SortBy>
+
+export const SortOrder = {
+  Asc: "asc",
+  Desc: "desc",
+} as const
+
+export type SortOrder = ClosedEnum<typeof SortOrder>
+
+export type DubLinks = {
+  domain?: string | undefined
+  folderId?: string | undefined
+  page?: number | undefined
+  pageSize?: number | undefined
+  search?: string | undefined
+  showArchived?: boolean | undefined
+  sortBy?: SortBy | undefined
+  sortOrder?: SortOrder | undefined;
+  tagIds?: Array<string> | string | undefined
+  tagNames?: Array<string> | string | undefined
+  tenantId?: string | undefined
+  userId?: string | undefined;
+};
