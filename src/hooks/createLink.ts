@@ -105,7 +105,9 @@ export const createDubHook =
             collection: 'dubLinks',
             context: { skipDubHook: true },
             data: {
-              externalId: found.externalId,
+              externalId: found.externalId?.startsWith('ext_')
+                ? found.externalId
+                : `ext_${found.externalId}`,
               shortLink: found.shortLink,
               source: { relationTo: originalSlug, value: doc.id },
               ...(payloadTagIds.length ? { dubTags: payloadTagIds } : {}),
@@ -154,7 +156,9 @@ export const createDubHook =
           overrideAccess: true,
         }))
 
-      const externalId = link.externalId || `ext_${slug}_${link.id}`
+      const externalId = link.externalId?.startsWith('ext_')
+        ? link.externalId
+        : `ext_${slug}_${link.id}`
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
       let tagMismatch = false
