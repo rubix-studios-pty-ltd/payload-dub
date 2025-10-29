@@ -177,7 +177,7 @@ export const createDubHook =
           overrideAccess: true,
         }))
 
-      const externalId = link.externalId || `ext_${slug}_${link.id || doc.id}`
+      const externalId = link.externalId || `ext_${slug}_${link.id}`
 
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 

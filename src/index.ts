@@ -105,7 +105,7 @@ export const payloadDub =
     }
 
     const tagCollection: CollectionConfig = {
-      ...(pluginConfig.overrides || {}),
+      ...(pluginConfig.overrides?.dubTagCollection || {}),
       slug: pluginConfig.overrides?.dubTagCollection?.slug || 'dubTags',
       access: {
         read: () => true,

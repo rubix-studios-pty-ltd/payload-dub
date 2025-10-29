@@ -34,7 +34,7 @@ export default buildConfig({
       domain: 'mycustomdomain.com', // Optional: custom Dub domain
       tenantId: '12345', // Optional: tenant identifier for Dub workspace
 
-      // Optional: overrides of dubcollection
+      // Optional: overrides of dubCollection
       overrides: {
         dubCollection: {
           access: {
@@ -66,7 +66,7 @@ export default buildConfig({
 If you do not provide overrides, the plugin defaults to:
 
 - dubLinks readable by all
-- Tags editable and deletable in Payload UI
+- Tags are readable, editable, and deletable by all users by default
 
 ## Features
 
