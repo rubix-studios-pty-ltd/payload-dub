@@ -33,6 +33,7 @@ export default buildConfig({
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       domain: 'mycustomdomain.com', // Optional: custom Dub domain
       tenantId: '12345', // Optional: tenant identifier for Dub workspace
+      isPro: false, // Optional: pro flag to enable disable pro features
 
       // Optional: overrides of dubCollection
       overrides: {
@@ -71,7 +72,7 @@ If you do not provide overrides, the plugin defaults to:
 ## Features
 
 - **Automation**: Generates and updates Dub shortlinks when documents are published or slugs change.
-- **Folders**: Collections are organised in folders.
+- **Folders**: Collections are organised in folders (Pro).
 - **Tags**: Tags can be created and removed directly in Payload.
 - **Sync**: Keeps Payload and Dub data consistent with minimal overhead.
 - **Configurable**: Supports per-collection overrides for color, slug, and URL base.

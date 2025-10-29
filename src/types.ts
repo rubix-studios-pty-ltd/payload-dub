@@ -129,6 +129,7 @@ export type DubConfig = {
   disabled?: boolean
   domain?: string
   dubApiKey: string
+  isPro?: boolean
   overrides?: {
     dubCollection?: {
       access?: CollectionConfig['access']
