@@ -46,6 +46,7 @@ export const createDubTagHooks = (dub: Dub) => {
     if (!doc.tagID) {
       return
     }
+
     try {
       await dub.tags.delete(doc.tagID)
     } catch (error) {
