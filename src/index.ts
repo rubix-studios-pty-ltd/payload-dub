@@ -19,17 +19,17 @@ export const payloadDub =
 
     const defaultFields: Field[] = [
       {
-        name: 'shortLink',
-        type: 'text',
-        required: false,
-        unique: true,
-      },
-      {
         name: 'externalId',
         type: 'text',
         admin: {
           readOnly: true,
         },
+        required: false,
+        unique: true,
+      },
+      {
+        name: 'shortLink',
+        type: 'text',
         required: false,
         unique: true,
       },
