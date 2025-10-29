@@ -155,8 +155,17 @@ export type DubConfig = {
   domain?: string
   dubApiKey: string
   overrides?: {
-    fields?: (args: { defaultFields: Field[] }) => Field[]
-  } & Partial<Omit<CollectionConfig, 'fields'>>
+    dubCollection?: {
+      access?: CollectionConfig['access']
+      admin?: CollectionConfig['admin']
+      fields?: (args: { defaultFields: Field[] }) => Field[]
+    } & Partial<Omit<CollectionConfig, 'fields'>>
+    dubTagCollection?: {
+      access?: CollectionConfig['access']
+      admin?: CollectionConfig['admin']
+      fields?: (args: { defaultFields: Field[] }) => Field[]
+    } & Partial<Omit<CollectionConfig, 'fields'>>
+  }
   siteUrl: string
   tenantId?: string
 }
