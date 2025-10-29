@@ -175,7 +175,7 @@ export const createDubHook =
           overrideAccess: true,
         }))
 
-      const externalId = link.tagID || `ext_${slug}_${link.id}`
+      const externalId = link.externalId || `ext_${slug}_${link.id}`
 
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
@@ -193,8 +193,7 @@ export const createDubHook =
       const requiresSync =
         !existingShort ||
         existingShort !== updated.shortLink ||
-        !noTagChange ||
-        link.externalId !== externalId
+        !noTagChange
 
       if (requiresSync) {
         await payload.update({
