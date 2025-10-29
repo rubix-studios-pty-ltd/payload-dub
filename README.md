@@ -33,10 +33,13 @@ export default buildConfig({
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       domain: 'mycustomdomain.com', // Optional: custom Dub domain
       tenantId: '12345', // Optional: tenant identifier for Dub workspace
-      overrides: {  // Optional: overrides of dubcollection
+
+      // Optional: overrides of dubcollection
+      overrides: {
         dubCollection: {
           access: {
             read: ({ req }) => !!req.user,
+            write: ({ req }) => !!req.user,
           },
           admin: {
             group: 'Marketing',

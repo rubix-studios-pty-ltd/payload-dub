@@ -117,31 +117,6 @@ export interface DubTypes {
   webhookIds?: null | string[]
 }
 
-export const DubColors = {
-  Blue: 'blue',
-  Brown: 'brown',
-  Green: 'green',
-  Pink: 'pink',
-  Purple: 'purple',
-  Red: 'red',
-  Yellow: 'yellow',
-} as const
-
-export type ClosedEnum<T> = T[keyof T]
-
-export type DubTagColor = ClosedEnum<typeof DubColors>
-
-export interface DubTagSchema {
-  color?: DubTagColor
-  id: string
-  name: string
-}
-
-export type DubFolder = {
-  id: string
-  name: string
-}
-
 export type DubCollection =
   | {
       docs: CollectionSlug
@@ -170,33 +145,28 @@ export type DubConfig = {
   tenantId?: string
 }
 
-export const SortBy = {
-  Clicks: "clicks",
-  CreatedAt: "createdAt",
-  LastClicked: "lastClicked",
-  SaleAmount: "saleAmount",
-} as const;
-
-export type SortBy = ClosedEnum<typeof SortBy>
-
-export const SortOrder = {
-  Asc: "asc",
-  Desc: "desc",
+export const DubColors = {
+  Blue: 'blue',
+  Brown: 'brown',
+  Green: 'green',
+  Pink: 'pink',
+  Purple: 'purple',
+  Red: 'red',
+  Yellow: 'yellow',
 } as const
 
-export type SortOrder = ClosedEnum<typeof SortOrder>
+export type ClosedEnum<T> = T[keyof T]
 
-export type DubLinks = {
-  domain?: string | undefined
-  folderId?: string | undefined
-  page?: number | undefined
-  pageSize?: number | undefined
-  search?: string | undefined
-  showArchived?: boolean | undefined
-  sortBy?: SortBy | undefined
-  sortOrder?: SortOrder | undefined;
-  tagIds?: Array<string> | string | undefined
-  tagNames?: Array<string> | string | undefined
-  tenantId?: string | undefined
-  userId?: string | undefined;
-};
+export type DubTagColor = ClosedEnum<typeof DubColors>
+
+export type DubFolder = {
+  id: string
+  name: string
+}
+
+export type DubTags = {
+  _status?: string
+  dubTags?: { id: string }[]
+  id: string
+  slug: string
+}

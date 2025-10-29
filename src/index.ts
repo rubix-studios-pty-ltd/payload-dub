@@ -1,16 +1,9 @@
 import { Dub } from 'dub'
-import {
-  type CollectionConfig,
-  type Config,
-  type Field,
-} from 'payload'
+import { type CollectionConfig, type Config, type Field } from 'payload'
 
 import { createDubHook } from './hooks/createLink.js'
 import { createDubTagHooks } from './hooks/createTag.js'
-import {
-  DubColors,
-  type DubConfig,
-} from './types.js'
+import { DubColors, type DubConfig } from './types.js'
 
 export const payloadDub =
   (pluginConfig: DubConfig) =>
@@ -28,7 +21,8 @@ export const payloadDub =
       {
         name: 'shortLink',
         type: 'text',
-        required: true,
+        required: false,
+        unique: true,
       },
       {
         name: 'externalId',
@@ -36,10 +30,11 @@ export const payloadDub =
         admin: {
           readOnly: true,
         },
-        required: true,
+        required: false,
+        unique: true,
       },
       {
-        name: 'tags',
+        name: 'dubTags',
         type: 'relationship',
         hasMany: true,
         relationTo: 'dubTags',
@@ -55,9 +50,24 @@ export const payloadDub =
 
     const defaultTagFields: Field[] = [
       {
+        name: 'tagID',
+        type: 'text',
+        access: {
+          read: () => true,
+          update: () => true,
+        },
+        admin: {
+          readOnly: true,
+        },
+        label: 'Tag ID',
+        required: false,
+        unique: true,
+      },
+      {
         name: 'name',
         type: 'text',
         required: true,
+        unique: true,
       },
       {
         name: 'color',
@@ -75,6 +85,7 @@ export const payloadDub =
       slug: pluginConfig.overrides?.dubCollection?.slug || 'dubLinks',
       access: {
         read: () => true,
+        update: () => true,
         ...(pluginConfig.overrides?.dubCollection?.access || {}),
       },
       admin: {
@@ -83,12 +94,13 @@ export const payloadDub =
         ...(pluginConfig.overrides?.dubCollection?.admin || {}),
       },
       fields:
-        pluginConfig?.overrides?.dubCollection?.fields && typeof pluginConfig?.overrides?.dubCollection?.fields === 'function'
+        pluginConfig?.overrides?.dubCollection?.fields &&
+        typeof pluginConfig?.overrides?.dubCollection?.fields === 'function'
           ? pluginConfig?.overrides?.dubCollection?.fields({ defaultFields })
           : defaultFields,
       labels: {
-        plural: 'Shortlinks',
-        singular: 'Shortlink',
+        plural: 'Links',
+        singular: 'Link',
       },
     }
 
@@ -97,6 +109,7 @@ export const payloadDub =
       slug: pluginConfig.overrides?.dubTagCollection?.slug || 'dubTags',
       access: {
         read: () => true,
+        update: () => true,
         ...(pluginConfig.overrides?.dubTagCollection?.access || {}),
       },
       admin: {
@@ -104,13 +117,14 @@ export const payloadDub =
         useAsTitle: 'name',
         ...(pluginConfig.overrides?.dubTagCollection?.admin || {}),
       },
-      fields: 
-        pluginConfig?.overrides?.dubTagCollection?.fields && typeof pluginConfig?.overrides?.dubTagCollection?.fields === 'function'
+      fields:
+        pluginConfig?.overrides?.dubTagCollection?.fields &&
+        typeof pluginConfig?.overrides?.dubTagCollection?.fields === 'function'
           ? pluginConfig?.overrides?.dubTagCollection?.fields({ defaultFields: defaultTagFields })
           : defaultTagFields,
       hooks: {
-        afterChange: [tagHooks.afterChange],
         afterDelete: [tagHooks.afterDelete],
+        beforeChange: [tagHooks.beforeChange],
       },
       labels: {
         plural: 'Tags',
@@ -144,13 +158,13 @@ export const payloadDub =
 
       const attachFields = [...(collection.fields || [])]
 
-      if (!attachFields.some(field => 'name' in field && field.name === 'dubTags')) {
+      if (!attachFields.some((field) => 'name' in field && field.name === 'dubTags')) {
         attachFields.push({
           name: 'dubTags',
           type: 'relationship',
-          admin: { 
-            allowCreate: true, 
-            position: 'sidebar' 
+          admin: {
+            allowCreate: true,
+            position: 'sidebar',
           },
           hasMany: true,
           relationTo: 'dubTags',
@@ -169,6 +183,7 @@ export const payloadDub =
               slug: targetSlug,
               domain: pluginConfig.domain,
               dub,
+              originalSlug: collection.slug,
               siteUrl: pluginConfig.siteUrl,
               tenantId: pluginConfig.tenantId,
             }),

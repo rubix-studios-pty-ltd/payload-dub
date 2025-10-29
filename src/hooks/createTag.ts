@@ -1,83 +1,57 @@
 import { type Dub } from 'dub'
-import {
-  type CollectionAfterChangeHook,
-  type CollectionAfterDeleteHook,
-} from 'payload'
+import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 'payload'
 
-import {
-  type DubLinks,
-  type DubTagSchema,
-} from '../types.js'
+import { type DubTagColor } from '../types.js'
 
 export const createDubTagHooks = (dub: Dub) => {
-  const afterChange: CollectionAfterChangeHook = async ({
+  const beforeChange: CollectionBeforeChangeHook = async ({
     context,
-    doc,
-    previousDoc,
+    data,
+    originalDoc,
     req: { payload },
   }) => {
     if (context?.skipDubHook) {
-      return doc
+      return data
+    }
+
+    if (!data.name || typeof data.name !== 'string') {
+      return data
     }
 
     try {
-      const tags: DubTagSchema[] = await dub.tags.list()
-
-      const previousTag = previousDoc?.name
-        ? tags.find((t) => t.name === previousDoc.name)
-        : undefined
-
-      const currentTag = tags.find((t) => t.name === doc.name)
-      const existing = previousTag || currentTag
-
-      if (!existing) {
-        await dub.tags.create({
-          name: doc.name,
-          color: doc.color,
+      if (originalDoc?.tagID) {
+        await dub.tags.update(originalDoc.tagID, {
+          name: data.name,
+          color: data.color as DubTagColor,
         })
-        return doc
+
+        data.tagID = originalDoc.tagID
+        return data
       }
 
-      const nameChanged = existing.name !== doc.name
-      const colorChanged = !!doc.color && existing.color !== doc.color
-      if (nameChanged || colorChanged) {
-        await dub.tags.update(existing.id, {
-          name: doc.name,
-          ...(doc.color ? { color: doc.color } : {}),
-        })
-      }
+      const created = await dub.tags.create({
+        name: data.name,
+        color: data.color as DubTagColor,
+      })
+
+      data.tagID = created.id
+      return data
     } catch (error) {
-      payload.logger.error({ error, message: 'Dub tag sync failed' })
+      payload.logger.error({ error, message: 'Tag create/update failed' })
+      return data
     }
-    return doc
   }
 
   const afterDelete: CollectionAfterDeleteHook = async ({ doc, req: { payload } }) => {
+    if (!doc.tagID) {
+      return
+    }
     try {
-      const tags: DubTagSchema[] = await dub.tags.list()
-      const match = tags.find((tag) => tag.name === doc?.name)
-      if (!match) {
-        return
-      }
-
-      const links = await dub.links.list()
-      const inUse = Array.isArray(links)
-        ? links.some((link: DubLinks) => (Array.isArray(link.tagIds) ? link.tagIds.includes(match.id) : false))
-        : false
-
-      if (!inUse) {
-        await dub.tags.delete(match.id)
-      } else {
-        payload.logger?.info?.({
-          message: 'Skipped Dub tag delete. Tag still in use.',
-          tag: match.name,
-          tagId: match.id,
-        })
-      }
+      await dub.tags.delete(doc.tagID)
     } catch (error) {
-      payload.logger?.error?.({ error, message: 'Dub tag delete failed' })
+      payload.logger?.error?.({ error, message: 'Tag delete failed' })
     }
   }
 
-  return { afterChange, afterDelete }
+  return { afterDelete, beforeChange }
 }
