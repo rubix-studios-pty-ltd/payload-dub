@@ -100,15 +100,6 @@ export const createDubHook =
             },
             overrideAccess: true,
           })
-        } else {
-          linkDoc = await payload.create({
-            collection: 'dubLinks',
-            context: { skipDubHook: true },
-            data: {
-              source: { relationTo: originalSlug, value: doc.id },
-            },
-            overrideAccess: true,
-          })
         }
       }
 
@@ -184,7 +175,7 @@ export const createDubHook =
           overrideAccess: true,
         }))
 
-      const externalId = link.externalId || `ext_${slug}_${link.id}`
+      const externalId = link.tagID || `ext_${slug}_${link.id}`
 
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
