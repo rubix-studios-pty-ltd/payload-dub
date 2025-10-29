@@ -1,179 +1,199 @@
 import { Dub } from 'dub'
-import { type CollectionAfterChangeHook, type Config, type Field } from 'payload'
+import { type CollectionConfig, type Config, type Field } from 'payload'
 
-import {
-  DubColors,
-  type DubConfig,
-  type DubTagColor,
-  type DubTagSchema,
-  type DubTypes,
-} from './types.js'
+import { createDubHook } from './hooks/createLink.js'
+import { createDubTagHooks } from './hooks/createTag.js'
+import { DubColors, type DubConfig } from './types.js'
 
 export const payloadDub =
-  (pluginOptions: DubConfig) =>
-  (config: Config): Config => {
-    if (!pluginOptions.collections || pluginOptions.disabled) {
-      return config
+  (pluginConfig: DubConfig) =>
+  (incomingConfig: Config): Config => {
+    if (!pluginConfig.collections || pluginConfig.disabled) {
+      return incomingConfig
     }
 
-    const dub = new Dub({ token: pluginOptions.dubApiKey })
+    const enabled = pluginConfig.collections
+    const dub = new Dub({ token: pluginConfig.dubApiKey })
 
-    const validColors = new Set(Object.values(DubColors))
+    const tagHooks = createDubTagHooks(dub)
 
-    const normalized: {
-      color?: DubTagColor
-      docs: string
-      slugOverride?: string
-    }[] = pluginOptions.collections.map((collection) => {
-      if (typeof collection === 'string') {
-        return { docs: collection }
-      }
+    const defaultFields: Field[] = [
+      {
+        name: 'externalId',
+        type: 'text',
+        admin: {
+          readOnly: true,
+        },
+        required: false,
+        unique: true,
+      },
+      {
+        name: 'shortLink',
+        type: 'text',
+        required: false,
+        unique: true,
+      },
+      {
+        name: 'dubTags',
+        type: 'relationship',
+        hasMany: true,
+        relationTo: 'dubTags',
+        required: false,
+      },
+      {
+        name: 'source',
+        type: 'relationship',
+        relationTo: pluginConfig.collections.map((c) => (typeof c === 'string' ? c : c.docs)),
+        required: true,
+      },
+    ]
 
-      const safeColor =
-        typeof collection.color === 'string' && validColors.has(collection.color)
-          ? collection.color
-          : undefined
+    const defaultTagFields: Field[] = [
+      {
+        name: 'tagID',
+        type: 'text',
+        access: {
+          read: () => true,
+          update: () => true,
+        },
+        admin: {
+          readOnly: true,
+        },
+        label: 'Tag ID',
+        required: false,
+        unique: true,
+      },
+      {
+        name: 'name',
+        type: 'text',
+        required: true,
+        unique: true,
+      },
+      {
+        name: 'color',
+        type: 'select',
+        options: Object.values(DubColors).map((color) => ({
+          label: color.charAt(0).toUpperCase() + color.slice(1),
+          value: color,
+        })),
+        required: true,
+      },
+    ]
 
-      return {
-        color: safeColor,
-        docs: collection.docs,
-        slugOverride: collection.slugOverride,
-      }
-    })
+    const dubCollection: CollectionConfig = {
+      ...(pluginConfig.overrides || {}),
+      slug: pluginConfig.overrides?.dubCollection?.slug || 'dubLinks',
+      access: {
+        read: () => true,
+        update: () => true,
+        ...(pluginConfig.overrides?.dubCollection?.access || {}),
+      },
+      admin: {
+        group: 'Dub',
+        useAsTitle: 'shortLink',
+        ...(pluginConfig.overrides?.dubCollection?.admin || {}),
+      },
+      fields:
+        pluginConfig?.overrides?.dubCollection?.fields &&
+        typeof pluginConfig?.overrides?.dubCollection?.fields === 'function'
+          ? pluginConfig?.overrides?.dubCollection?.fields({ defaultFields })
+          : defaultFields,
+      labels: {
+        plural: 'Links',
+        singular: 'Link',
+      },
+    }
 
-    normalized.forEach(({ color, docs, slugOverride }) => {
-      const targetSlug = slugOverride || docs
-      const collection = config.collections?.find((col) => col.slug === docs)
+    const tagCollection: CollectionConfig = {
+      ...(pluginConfig.overrides?.dubTagCollection || {}),
+      slug: pluginConfig.overrides?.dubTagCollection?.slug || 'dubTags',
+      access: {
+        read: () => true,
+        update: () => true,
+        ...(pluginConfig.overrides?.dubTagCollection?.access || {}),
+      },
+      admin: {
+        group: 'Dub',
+        useAsTitle: 'name',
+        ...(pluginConfig.overrides?.dubTagCollection?.admin || {}),
+      },
+      fields:
+        pluginConfig?.overrides?.dubTagCollection?.fields &&
+        typeof pluginConfig?.overrides?.dubTagCollection?.fields === 'function'
+          ? pluginConfig?.overrides?.dubTagCollection?.fields({ defaultFields: defaultTagFields })
+          : defaultTagFields,
+      hooks: {
+        afterDelete: [tagHooks.afterDelete],
+        beforeChange: [tagHooks.beforeChange],
+      },
+      labels: {
+        plural: 'Tags',
+        singular: 'Tag',
+      },
+    }
 
-      if (!collection) {
-        return
-      }
+    const incomingCollections = incomingConfig.collections || []
+    const updatedCollections: CollectionConfig[] = [
+      ...incomingCollections,
+      dubCollection,
+      tagCollection,
+    ]
 
-      const hasField = collection.fields.some(
-        (field: Field) => 'name' in field && field.name === 'shortLink'
+    const collectionsWithHooks = updatedCollections.map((collection) => {
+      const configMatch = enabled.find((col) =>
+        typeof col === 'string' ? col === collection.slug : col.docs === collection.slug
       )
 
-      if (!hasField) {
-        collection.fields.push({
-          name: 'shortLink',
-          type: 'text',
-          admin: { position: 'sidebar', readOnly: true },
-          label: 'Short link',
+      if (!configMatch) {
+        return collection
+      }
+
+      let targetSlug: string
+
+      if (typeof configMatch === 'string') {
+        targetSlug = configMatch
+      } else {
+        targetSlug = configMatch.slugOverride || configMatch.docs
+      }
+
+      const attachFields = [...(collection.fields || [])]
+
+      if (!attachFields.some((field) => 'name' in field && field.name === 'dubTags')) {
+        attachFields.push({
+          name: 'dubTags',
+          type: 'relationship',
+          admin: {
+            allowCreate: true,
+            position: 'sidebar',
+          },
+          hasMany: true,
+          relationTo: 'dubTags',
+          required: false,
         })
       }
 
-      const existingHooks = collection.hooks?.afterChange || []
-      collection.hooks = {
-        ...collection.hooks,
-        afterChange: [
-          ...existingHooks,
-          createDubHook({
-            slug: targetSlug,
-            color,
-            dub,
-            siteUrl: pluginOptions.siteUrl,
-            ...(pluginOptions.domain ? { domain: pluginOptions.domain } : {}),
-            ...(pluginOptions.tenantId ? { tenantId: pluginOptions.tenantId } : {}),
-          }),
-        ],
+      return {
+        ...collection,
+        fields: attachFields,
+        hooks: {
+          ...(collection.hooks || {}),
+          afterChange: [
+            ...(collection.hooks?.afterChange || []),
+            createDubHook({
+              slug: targetSlug,
+              domain: pluginConfig.domain,
+              dub,
+              originalSlug: collection.slug,
+              siteUrl: pluginConfig.siteUrl,
+              tenantId: pluginConfig.tenantId,
+            }),
+          ],
+        },
       }
     })
 
-    return config
-  }
-
-const createDubHook =
-  ({
-    slug,
-    color,
-    domain,
-    dub,
-    siteUrl,
-    tenantId,
-  }: {
-    color?: DubTagColor
-    domain?: string
-    dub: Dub
-    siteUrl: string
-    slug: string
-    tenantId?: string
-  }): CollectionAfterChangeHook =>
-  async ({
-    collection,
-    context,
-    doc,
-    operation,
-    previousDoc,
-    req: { payload },
-  }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (context?.skipDubHook) {
-      return doc
+    return {
+      ...incomingConfig,
+      collections: collectionsWithHooks,
     }
-
-    if (doc._status !== 'published' || !doc.id || !doc.slug) {
-      return doc
-    }
-
-    if (operation === 'create' || operation === 'update') {
-      let tenant: string | undefined
-
-      if (tenantId) {
-        if (tenantId.startsWith('user_')) {
-          tenant = tenantId
-        } else {
-          tenant = `user_${tenantId}`
-        }
-      } else {
-        tenant = undefined
-      }
-
-      const externalId = `ext_${slug}_${doc.id}`
-      const destinationUrl = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
-
-      const linkData: DubTypes = {
-        externalId,
-        tagNames: [slug],
-        url: destinationUrl,
-        ...(domain ? { domain } : {}),
-        ...(tenantId ? { tenantId: tenant } : {}),
-      }
-
-      try {
-        const allTags = await dub.tags.list()
-        const existingTag = allTags.find((tag: DubTagSchema) => tag.name === slug)
-
-        if (!existingTag) {
-          await dub.tags.create({
-            name: slug,
-            ...(color ? { color } : {}),
-          })
-        } else if (color && existingTag.color !== color) {
-          await dub.tags.update(existingTag.id, { name: slug, color })
-        }
-
-        const response = await dub.links.upsert(linkData)
-
-        const shortLink = response.shortLink
-        const noShortLink = !previousDoc?.shortLink || previousDoc.shortLink.trim() === ''
-
-        if (noShortLink && shortLink) {
-          await payload.update({
-            id: doc.id,
-            collection: collection.slug,
-            context: { skipDubHook: true },
-            data: {
-              shortLink,
-            },
-            overrideAccess: true,
-          })
-        }
-      } catch (err) {
-        payload.logger.error({
-          error: err instanceof Error ? err.message : String(err),
-          msg: `Link creation failed for ${slug}`,
-        })
-      }
-    }
-
-    return doc
   }

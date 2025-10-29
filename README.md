@@ -25,7 +25,7 @@ export default buildConfig({
   plugins: [
     payloadDub({
       collections: [
-        { docs: 'posts', slugOverride: 'post', color: 'blue' }, // Custom slug + tag color
+        { docs: 'posts', slugOverride: 'post' }, // Custom slug used for Dub folder and shortlinks
         { docs: 'insights', slugOverride: 'insight' }, // Custom slug only
         { docs: 'news' }, // Default behavior
       ],
@@ -33,17 +33,49 @@ export default buildConfig({
       siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
       domain: 'mycustomdomain.com', // Optional: custom Dub domain
       tenantId: '12345', // Optional: tenant identifier for Dub workspace
+
+      // Optional: overrides of dubCollection
+      overrides: {
+        dubCollection: {
+          access: {
+            read: ({ req }) => !!req.user,
+            write: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+            defaultColumns: ['shortLink', 'externalId'],
+          },
+        },
+        dubTagCollection: {
+          access: {
+            read: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+            defaultColumns: ['name', 'color'],
+          },
+        },
+      },
     }),
   ],
 })
 ```
 
+## Notes
+
+If you do not provide overrides, the plugin defaults to:
+
+- dubLinks readable by all
+- Tags are readable, editable, and deletable by all users by default
+
 ## Features
 
 - **Automation**: Generates and updates Dub shortlinks when documents are published or slugs change.
-- **Tags**: Creates and synchronizes tag colors per collection.
+- **Folders**: Collections are organised in folders.
+- **Tags**: Tags can be created and removed directly in Payload.
 - **Sync**: Keeps Payload and Dub data consistent with minimal overhead.
 - **Configurable**: Supports per-collection overrides for color, slug, and URL base.
+- **Access Control**: Access, field and admin overrides for complete CMS control.
 
 ## License
 

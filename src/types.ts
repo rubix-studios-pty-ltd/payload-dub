@@ -1,4 +1,4 @@
-import { type CollectionSlug } from 'payload'
+import { type CollectionConfig, type CollectionSlug, type Field } from 'payload'
 
 export interface DubTypes {
   /** Android destination URL for device targeting. */
@@ -117,6 +117,34 @@ export interface DubTypes {
   webhookIds?: null | string[]
 }
 
+export type DubCollection =
+  | {
+      docs: CollectionSlug
+      slugOverride?: string
+    }
+  | CollectionSlug
+
+export type DubConfig = {
+  collections?: DubCollection[]
+  disabled?: boolean
+  domain?: string
+  dubApiKey: string
+  overrides?: {
+    dubCollection?: {
+      access?: CollectionConfig['access']
+      admin?: CollectionConfig['admin']
+      fields?: (args: { defaultFields: Field[] }) => Field[]
+    } & Partial<Omit<CollectionConfig, 'fields'>>
+    dubTagCollection?: {
+      access?: CollectionConfig['access']
+      admin?: CollectionConfig['admin']
+      fields?: (args: { defaultFields: Field[] }) => Field[]
+    } & Partial<Omit<CollectionConfig, 'fields'>>
+  }
+  siteUrl: string
+  tenantId?: string
+}
+
 export const DubColors = {
   Blue: 'blue',
   Brown: 'brown',
@@ -131,25 +159,14 @@ export type ClosedEnum<T> = T[keyof T]
 
 export type DubTagColor = ClosedEnum<typeof DubColors>
 
-export interface DubTagSchema {
-  color?: DubTagColor
+export type DubFolder = {
   id: string
   name: string
 }
 
-export type DubCollection =
-  | {
-      color?: DubTagColor
-      docs: CollectionSlug
-      slugOverride?: string
-    }
-  | CollectionSlug
-
-export type DubConfig = {
-  collections?: DubCollection[]
-  disabled?: boolean
-  domain?: string
-  dubApiKey: string
-  siteUrl: string
-  tenantId?: string
+export type DubTags = {
+  _status?: string
+  dubTags?: { id: string }[]
+  id: string
+  slug: string
 }
