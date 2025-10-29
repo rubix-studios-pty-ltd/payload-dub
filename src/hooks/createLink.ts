@@ -175,7 +175,7 @@ export const createDubHook =
       }
 
       const data: DubTypes = {
-        externalId,
+        externalId: externalId.startsWith('ext_') ? externalId : `ext_${externalId}`,
         ...(folderId ? { folderId } : {}),
         tagIds: dubTagIds,
         url,
