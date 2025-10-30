@@ -126,7 +126,7 @@ export const createDubHook =
       const document = doc as DubTags
 
       const payloadTagIds = Array.isArray(document.dubTags)
-        ? document.dubTags.map((t) => t.id).filter(Boolean)
+        ? document.dubTags.map((tag) => tag.id).filter(Boolean)
         : []
 
       const dubTagsQuery = payloadTagIds.length
@@ -139,7 +139,7 @@ export const createDubHook =
         : null
 
       const dubTagIds =
-        dubTagsQuery?.docs?.map((t) => t.tagID).filter((id): id is string => Boolean(id)) ?? []
+        dubTagsQuery?.docs?.map((tag) => tag.tagID).filter((id): id is string => Boolean(id)) ?? []
 
       const link =
         linkDoc ||
@@ -154,7 +154,10 @@ export const createDubHook =
           overrideAccess: true,
         }))
 
-      const externalId = link.externalId || `ext_${slug}_${link.id}`
+      const externalId = link.externalId?.startsWith('ext_')
+        ? link.externalId
+        : `ext_${link.externalId || `${slug}_${link.id}`}`
+
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
       let tagMismatch = false
@@ -162,7 +165,7 @@ export const createDubHook =
       if (existingShort) {
         const currentDubTags = await dub.links.get({ externalId })
         const dubTagIdsCurrent: string[] = Array.isArray(currentDubTags?.tags)
-          ? currentDubTags.tags.map((t) => t.id)
+          ? currentDubTags.tags.map((tag) => tag.id)
           : []
 
         tagMismatch =
@@ -175,7 +178,7 @@ export const createDubHook =
       }
 
       const data: DubTypes = {
-        externalId: externalId.startsWith('ext_') ? externalId : `ext_${externalId}`,
+        externalId,
         ...(folderId ? { folderId } : {}),
         tagIds: dubTagIds,
         url,
