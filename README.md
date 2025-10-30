@@ -40,7 +40,7 @@ export default buildConfig({
         dubCollection: {
           access: {
             read: ({ req }) => !!req.user,
-            write: ({ req }) => !!req.user,
+            create: ({ req }) => !!req.user,
           },
           admin: {
             group: 'Marketing',
