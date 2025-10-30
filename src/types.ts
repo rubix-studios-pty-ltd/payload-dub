@@ -167,7 +167,7 @@ export type DubFolder = {
 
 export type DubTags = {
   _status?: string
-  dubTags?: { id: string }[]
+  dubTags?: ({ id: string } | string)[]
   id: string
   slug: string
 }

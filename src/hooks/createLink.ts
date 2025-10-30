@@ -126,7 +126,7 @@ export const createDubHook =
       const document = doc as DubTags
 
       const payloadTagIds = Array.isArray(document.dubTags)
-        ? document.dubTags.map((tag) => tag.id).filter(Boolean)
+        ? document.dubTags.map((t) => (typeof t === 'string' ? t : t.id)).filter(Boolean)
         : []
 
       const dubTagsQuery = payloadTagIds.length
@@ -186,7 +186,15 @@ export const createDubHook =
         ...(tid ? { tenantId: tid } : {}),
       }
 
-      const updated = await dub.links.upsert(data)
+      let updated
+
+      const existing = await dub.links.get({ externalId }).catch(() => null)
+
+      if (existing) {
+        updated = await dub.links.update(externalId, data)
+      } else {
+        updated = await dub.links.create(data)
+      }
 
       const requiresSync =
         !existingShort ||
