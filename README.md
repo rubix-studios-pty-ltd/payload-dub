@@ -36,25 +36,23 @@ export default buildConfig({
       isPro: false, // Optional: pro flag to enable disable pro features
 
       // Optional: overrides of dubCollection
-      overrides: {
-        dubCollection: {
-          access: {
-            read: ({ req }) => !!req.user,
-            create: ({ req }) => !!req.user,
-          },
-          admin: {
-            group: 'Marketing',
-            defaultColumns: ['shortLink', 'externalId'],
-          },
+      dubCollection: {
+        access: {
+          read: ({ req }) => !!req.user,
+          create: ({ req }) => !!req.user,
         },
-        dubTagCollection: {
-          access: {
-            read: ({ req }) => !!req.user,
-          },
-          admin: {
-            group: 'Marketing',
-            defaultColumns: ['name', 'color'],
-          },
+        admin: {
+          group: 'Marketing',
+          defaultColumns: ['shortLink', 'externalId'],
+        },
+      },
+      dubTagCollection: {
+        access: {
+          read: ({ req }) => !!req.user,
+        },
+        admin: {
+          group: 'Marketing',
+          defaultColumns: ['name', 'color'],
         },
       },
     }),

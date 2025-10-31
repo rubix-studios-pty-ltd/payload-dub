@@ -81,22 +81,22 @@ export const payloadDub =
     ]
 
     const dubCollection: CollectionConfig = {
-      ...(pluginConfig.overrides || {}),
-      slug: pluginConfig.overrides?.dubCollection?.slug || 'dubLinks',
+      ...(pluginConfig.dubCollection || {}),
+      slug: pluginConfig.dubCollection?.overrides?.slug || 'dubLinks',
       access: {
         read: () => true,
         update: () => true,
-        ...(pluginConfig.overrides?.dubCollection?.access || {}),
+        ...(pluginConfig.dubCollection?.overrides?.access || {}),
       },
       admin: {
         group: 'Dub',
         useAsTitle: 'shortLink',
-        ...(pluginConfig.overrides?.dubCollection?.admin || {}),
+        ...(pluginConfig.dubCollection?.overrides?.admin || {}),
       },
       fields:
-        pluginConfig?.overrides?.dubCollection?.fields &&
-        typeof pluginConfig?.overrides?.dubCollection?.fields === 'function'
-          ? pluginConfig?.overrides?.dubCollection?.fields({ defaultFields })
+        pluginConfig.dubCollection?.overrides?.fields &&
+        typeof pluginConfig.dubCollection?.overrides?.fields === 'function'
+          ? pluginConfig.dubCollection?.overrides?.fields({ defaultFields })
           : defaultFields,
       labels: {
         plural: 'Links',
@@ -105,22 +105,22 @@ export const payloadDub =
     }
 
     const tagCollection: CollectionConfig = {
-      ...(pluginConfig.overrides?.dubTagCollection || {}),
-      slug: pluginConfig.overrides?.dubTagCollection?.slug || 'dubTags',
+      ...(pluginConfig.dubTagCollection?.overrides || {}),
+      slug: pluginConfig.dubTagCollection?.overrides?.slug || 'dubTags',
       access: {
         read: () => true,
         update: () => true,
-        ...(pluginConfig.overrides?.dubTagCollection?.access || {}),
+        ...(pluginConfig.dubTagCollection?.overrides?.access || {}),
       },
       admin: {
         group: 'Dub',
         useAsTitle: 'name',
-        ...(pluginConfig.overrides?.dubTagCollection?.admin || {}),
+        ...(pluginConfig.dubTagCollection?.overrides?.admin || {}),
       },
       fields:
-        pluginConfig?.overrides?.dubTagCollection?.fields &&
-        typeof pluginConfig?.overrides?.dubTagCollection?.fields === 'function'
-          ? pluginConfig?.overrides?.dubTagCollection?.fields({ defaultFields: defaultTagFields })
+        pluginConfig.dubTagCollection?.overrides?.fields &&
+        typeof pluginConfig.dubTagCollection?.overrides?.fields === 'function'
+          ? pluginConfig.dubTagCollection?.overrides?.fields({ defaultFields: defaultTagFields })
           : defaultTagFields,
       hooks: {
         afterDelete: [tagHooks.afterDelete],
