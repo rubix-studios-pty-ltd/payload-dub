@@ -67,9 +67,9 @@
     "@swc/core": "^1.14.0",
     "@types/react": "19.2.2",
     "eslint": "^9.38.0",
-    "payload": "3.61.1",
+    "payload": "3.62.0",
     "prettier": "^3.6.2",
-    "rimraf": "6.0.1",
+    "rimraf": "6.1.0",
     "semantic-release": "^25.0.1",
     "typescript": "5.9.3"
   },
@@ -94,7 +94,7 @@
     }
   },
   "dependencies": {
-    "dub": "^0.67.0"
+    "dub": "^0.68.0"
   },
   "packageManager": "pnpm@10.20.0"
 }

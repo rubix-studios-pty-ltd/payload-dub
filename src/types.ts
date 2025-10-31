@@ -124,24 +124,20 @@ export type DubCollection =
     }
   | CollectionSlug
 
+export type FieldsOverride = (args: { defaultFields: Field[] }) => Field[]
+
 export type DubConfig = {
   collections?: DubCollection[]
   disabled?: boolean
   domain?: string
   dubApiKey: string
-  isPro?: boolean
-  overrides?: {
-    dubCollection?: {
-      access?: CollectionConfig['access']
-      admin?: CollectionConfig['admin']
-      fields?: (args: { defaultFields: Field[] }) => Field[]
-    } & Partial<Omit<CollectionConfig, 'fields'>>
-    dubTagCollection?: {
-      access?: CollectionConfig['access']
-      admin?: CollectionConfig['admin']
-      fields?: (args: { defaultFields: Field[] }) => Field[]
-    } & Partial<Omit<CollectionConfig, 'fields'>>
+  dubCollection?: {
+    overrides?: { fields?: FieldsOverride } & Partial<Omit<CollectionConfig, 'fields'>>
   }
+  dubTagCollection?: {
+    overrides?: { fields?: FieldsOverride } & Partial<Omit<CollectionConfig, 'fields'>>
+  }
+  isPro?: boolean
   siteUrl: string
   tenantId?: string
 }
