@@ -37,22 +37,26 @@ export default buildConfig({
 
       // Optional: overrides of dubCollection
       dubCollection: {
-        access: {
-          read: ({ req }) => !!req.user,
-          create: ({ req }) => !!req.user,
-        },
-        admin: {
-          group: 'Marketing',
-          defaultColumns: ['shortLink', 'externalId'],
+        overrides: {
+          access: {
+            read: ({ req }) => !!req.user,
+            create: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+            defaultColumns: ['shortLink', 'externalId'],
+          },
         },
       },
       dubTagCollection: {
-        access: {
-          read: ({ req }) => !!req.user,
-        },
-        admin: {
-          group: 'Marketing',
-          defaultColumns: ['name', 'color'],
+        overrides: {
+          access: {
+            read: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+            defaultColumns: ['name', 'color'],
+          },
         },
       },
     }),
@@ -91,4 +95,3 @@ For support or inquiries:
 
 Rubix Studios Pty. Ltd.  
 [https://rubixstudios.com.au](https://rubixstudios.com.au)
-
