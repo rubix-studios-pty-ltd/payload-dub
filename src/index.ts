@@ -158,6 +158,41 @@ export const payloadDub =
 
       const attachFields = [...(collection.fields || [])]
 
+      if (!attachFields.some((field) => 'name' in field && field.name === 'dubLink')) {
+        attachFields.push({
+          name: 'dubLink',
+          type: 'text',
+          admin: {
+            position: 'sidebar',
+            readOnly: true,
+          },
+          hooks: {
+            afterRead: [
+              async ({ originalDoc, req }) => {
+                try {
+                  if (!originalDoc?.id) {
+                    return ''
+                  }
+
+                  const dubDoc = await req.payload.find({
+                    collection: 'dubLinks',
+                    limit: 1,
+                    overrideAccess: true,
+                    where: {
+                      'source.value': { equals: originalDoc.id },
+                    },
+                  })
+
+                  return dubDoc?.docs?.[0]?.shortLink || ''
+                } catch {
+                  return ''
+                }
+              },
+            ],
+          },
+        })
+      }
+
       if (!attachFields.some((field) => 'name' in field && field.name === 'dubTags')) {
         attachFields.push({
           name: 'dubTags',
