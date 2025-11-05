@@ -3,7 +3,7 @@ import { type CollectionAfterChangeHook } from 'payload'
 
 import { type DubFolder, type DubTags, type DubTypes } from '../types.js'
 
-export const createDubHook =
+export const createSingle =
   ({
     slug,
     domain,

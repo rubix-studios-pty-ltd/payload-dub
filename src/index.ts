@@ -1,8 +1,9 @@
 import { Dub } from 'dub'
 import { type CollectionConfig, type Config, type Field } from 'payload'
 
-import { createDubHook } from './hooks/createLink.js'
-import { createDubTagHooks } from './hooks/createTag.js'
+import { createSingle } from './hooks/createSingle.js'
+import { manageLinks } from './hooks/manageLinks.js'
+import { manageTags } from './hooks/manageTags.js'
 import { DubColors, type DubConfig } from './types.js'
 
 export const payloadDub =
@@ -15,9 +16,10 @@ export const payloadDub =
     const enabled = pluginConfig.collections
     const dub = new Dub({ token: pluginConfig.dubApiKey })
 
-    const tagHooks = createDubTagHooks(dub)
+    const tagHooks = manageTags(dub)
+    const linkHooks = manageLinks(dub)
 
-    const defaultFields: Field[] = [
+    const linksFields: Field[] = [
       {
         name: 'externalId',
         type: 'text',
@@ -48,7 +50,7 @@ export const payloadDub =
       },
     ]
 
-    const defaultTagFields: Field[] = [
+    const tagsFields: Field[] = [
       {
         name: 'tagID',
         type: 'text',
@@ -80,7 +82,7 @@ export const payloadDub =
       },
     ]
 
-    const dubCollection: CollectionConfig = {
+    const dubLinks: CollectionConfig = {
       ...(pluginConfig?.dubCollection?.overrides || {}),
       slug: pluginConfig.dubCollection?.overrides?.slug || 'dubLinks',
       access: {
@@ -96,15 +98,19 @@ export const payloadDub =
       fields:
         pluginConfig.dubCollection?.overrides?.fields &&
         typeof pluginConfig.dubCollection?.overrides?.fields === 'function'
-          ? pluginConfig.dubCollection?.overrides?.fields({ defaultFields })
-          : defaultFields,
+          ? pluginConfig.dubCollection?.overrides?.fields({ defaultFields: linksFields })
+          : linksFields,
+      hooks: {
+        afterDelete: [linkHooks.afterDelete],
+        beforeChange: [linkHooks.beforeChange],
+      },
       labels: {
         plural: 'Links',
         singular: 'Link',
       },
     }
 
-    const tagCollection: CollectionConfig = {
+    const dubTags: CollectionConfig = {
       ...(pluginConfig.dubTagCollection?.overrides || {}),
       slug: pluginConfig.dubTagCollection?.overrides?.slug || 'dubTags',
       access: {
@@ -120,8 +126,8 @@ export const payloadDub =
       fields:
         pluginConfig.dubTagCollection?.overrides?.fields &&
         typeof pluginConfig.dubTagCollection?.overrides?.fields === 'function'
-          ? pluginConfig.dubTagCollection?.overrides?.fields({ defaultFields: defaultTagFields })
-          : defaultTagFields,
+          ? pluginConfig.dubTagCollection?.overrides?.fields({ defaultFields: tagsFields })
+          : tagsFields,
       hooks: {
         afterDelete: [tagHooks.afterDelete],
         beforeChange: [tagHooks.beforeChange],
@@ -133,10 +139,11 @@ export const payloadDub =
     }
 
     const incomingCollections = incomingConfig.collections || []
+
     const updatedCollections: CollectionConfig[] = [
       ...incomingCollections,
-      dubCollection,
-      tagCollection,
+      dubLinks,
+      dubTags,
     ]
 
     const collectionsWithHooks = updatedCollections.map((collection) => {
@@ -214,7 +221,7 @@ export const payloadDub =
           ...(collection.hooks || {}),
           afterChange: [
             ...(collection.hooks?.afterChange || []),
-            createDubHook({
+            createSingle({
               slug: targetSlug,
               domain: pluginConfig.domain,
               dub,

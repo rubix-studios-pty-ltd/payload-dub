@@ -3,7 +3,7 @@ import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 
 
 import { type DubTagColor } from '../types.js'
 
-export const createDubTagHooks = (dub: Dub) => {
+export const manageTags = (dub: Dub) => {
   const beforeChange: CollectionBeforeChangeHook = async ({
     context,
     data,
