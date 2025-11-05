@@ -140,11 +140,7 @@ export const payloadDub =
 
     const incomingCollections = incomingConfig.collections || []
 
-    const updatedCollections: CollectionConfig[] = [
-      ...incomingCollections,
-      dubLinks,
-      dubTags,
-    ]
+    const updatedCollections: CollectionConfig[] = [...incomingCollections, dubLinks, dubTags]
 
     const collectionsWithHooks = updatedCollections.map((collection) => {
       const configMatch = enabled.find((col) =>

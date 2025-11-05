@@ -32,10 +32,10 @@ export const manageLinks = (dub: Dub) => {
             collection: 'dubTags',
             limit: payloadTagIds.length,
             overrideAccess: true,
-            where: { 
-                id: { 
-                    in: payloadTagIds 
-                } 
+            where: {
+              id: {
+                in: payloadTagIds,
+              },
             },
           })
         : null
