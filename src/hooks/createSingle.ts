@@ -145,6 +145,9 @@ export const createSingle =
         linkDoc ||
         (await payload.create({
           collection: 'dubLinks',
+          context: { 
+            skipDubHook: true 
+          },
           data: {
             source: {
               relationTo: originalSlug,
