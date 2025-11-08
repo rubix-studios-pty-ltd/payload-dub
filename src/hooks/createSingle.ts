@@ -59,7 +59,7 @@ export const createSingle =
       // Temporary migration script to create missing links
       if (!linkDoc) {
         const legacy = `ext_${slug}_${doc.id}`
-        const found = await dub.links.get({ externalId: legacy })
+        const found = await dub.links.get({ externalId: legacy }).catch(() => null)
 
         const payloadTagIds: string[] = []
 
