@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.5](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.4.4...v1.4.5) (2025-12-26)
+
+
+### Bug Fixes
+
+* enhance link creation logic to check for URL mismatches ([6afe7c4](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/6afe7c4c9332e65403d71370a733f58cf12014f9))
+
 ## [1.4.4](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.4.3...v1.4.4) (2025-12-04)
 
 
