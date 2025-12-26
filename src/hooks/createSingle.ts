@@ -145,8 +145,8 @@ export const createSingle =
         linkDoc ||
         (await payload.create({
           collection: 'dubLinks',
-          context: { 
-            skipDubHook: true 
+          context: {
+            skipDubHook: true,
           },
           data: {
             source: {
@@ -164,19 +164,23 @@ export const createSingle =
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
       let tagMismatch = false
+      let urlMismatch = false
 
       if (existingShort) {
-        const currentDubTags = await dub.links.get({ externalId })
-        const dubTagIdsCurrent: string[] = Array.isArray(currentDubTags?.tags)
-          ? currentDubTags.tags.map((tag) => tag.id)
+        const currentDub = await dub.links.get({ externalId })
+
+        const dubTagCurrent: string[] = Array.isArray(currentDub?.tags)
+          ? currentDub.tags.map((tag) => tag.id)
           : []
 
         tagMismatch =
-          dubTagIds.length !== dubTagIdsCurrent.length ||
-          !dubTagIds.every((id) => dubTagIdsCurrent.includes(id))
+          dubTagIds.length !== dubTagCurrent.length ||
+          !dubTagIds.every((id) => dubTagCurrent.includes(id))
+
+        urlMismatch = Boolean(currentDub?.url && currentDub.url !== url)
       }
 
-      if (existingShort && !tagMismatch) {
+      if (existingShort && !tagMismatch && !urlMismatch) {
         return doc
       }
 
