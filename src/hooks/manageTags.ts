@@ -19,22 +19,25 @@ export const manageTags = (dub: Dub) => {
     }
 
     try {
+      let tagID: string
+
       if (originalDoc?.tagID) {
         await dub.tags.update(originalDoc.tagID, {
           name: data.name,
           color: data.color as DubTagColor,
         })
 
-        data.tagID = originalDoc.tagID
-        return data
+        tagID = originalDoc.tagID
+      } else {
+        const created = await dub.tags.create({
+          name: data.name,
+          color: data.color as DubTagColor,
+        })
+
+        tagID = created.id
       }
 
-      const created = await dub.tags.create({
-        name: data.name,
-        color: data.color as DubTagColor,
-      })
-
-      data.tagID = created.id
+      data.tagID = tagID
       return data
     } catch (error) {
       payload.logger.error({ error, message: 'Tag create/update failed' })

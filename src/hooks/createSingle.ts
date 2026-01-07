@@ -54,66 +54,7 @@ export const createSingle =
         where: { 'source.value': { equals: doc.id } },
       })
 
-      let linkDoc = lookup.docs[0] // revert to const after migration
-
-      // Temporary migration script to create missing links
-      if (!linkDoc) {
-        const legacy = `ext_${slug}_${doc.id}`
-        const found = await dub.links.get({ externalId: legacy }).catch(() => null)
-
-        const payloadTagIds: string[] = []
-
-        if (found && Array.isArray(found.tags) && found.tags.length > 0) {
-          const tagIds = found.tags.map((t) => t.id)
-
-          const tagLookup = await payload.find({
-            collection: 'dubTags',
-            limit: tagIds.length,
-            overrideAccess: true,
-            where: { tagID: { in: tagIds } },
-          })
-
-          const existingTags = tagLookup.docs || []
-
-          payloadTagIds.push(
-            ...existingTags.map((t) => t.id).filter((id): id is string => typeof id === 'string')
-          )
-
-          for (const tag of found.tags) {
-            const exists = existingTags.some((t) => t.tagID === tag.id)
-            if (!exists) {
-              const created = await payload.create({
-                collection: 'dubTags',
-                context: { skipDubHook: true },
-                data: {
-                  name: tag.name,
-                  color: tag.color,
-                  tagID: tag.id,
-                },
-                overrideAccess: true,
-              })
-
-              if (created?.id && typeof created.id === 'string') {
-                payloadTagIds.push(created.id)
-              }
-            }
-          }
-        }
-
-        if (found) {
-          linkDoc = await payload.create({
-            collection: 'dubLinks',
-            context: { skipDubHook: true },
-            data: {
-              externalId: found.externalId,
-              shortLink: found.shortLink,
-              source: { relationTo: originalSlug, value: doc.id },
-              ...(payloadTagIds.length ? { dubTags: payloadTagIds } : {}),
-            },
-            overrideAccess: true,
-          })
-        }
-      }
+      const linkDoc = lookup.docs[0]
 
       const tid = tenantId
         ? tenantId.startsWith('user_')
