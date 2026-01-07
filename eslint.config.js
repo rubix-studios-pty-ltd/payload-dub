@@ -15,7 +15,6 @@ export default [
       '**/tsconfig.tsbuildinfo',
       '**/README.md',
       '**/eslint.config.js',
-      '**/payload-types.ts',
       '**/dist/',
       '**/.yarn/',
       '**/build/',

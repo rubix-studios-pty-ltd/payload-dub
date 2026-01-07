@@ -1,14 +1,14 @@
 # PayloadCMS + Dub Plugin
 
 A Payload CMS plugin that integrates with Dub to automatically create and manage shortlinks for your content.
-This plugin synchronizes your Payload collections with Dub, ensuring that every published document gets a corresponding shortlink, tag, and color configuration.
+This plugin synchronizes your Payload collections with Dub.co, ensuring that every published document gets a corresponding shortlink, tag, and color configuration.
 
 [![npm version](https://img.shields.io/npm/v/@rubixstudios/payload-dub.svg)](https://www.npmjs.com/package/@rubixstudios/payload-dub)
 ![Release](https://github.com/rubix-studios-pty-ltd/payload-dub/actions/workflows/release.yml/badge.svg)
 
 Dub is the modern, open-source link attribution platform for short links, conversion tracking, and affiliate programs.
 
-Create a Dub account: [Dub](https://refer.dub.co/rubixstudios)
+Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
 ## Installation
 
@@ -25,15 +25,15 @@ export default buildConfig({
   plugins: [
     payloadDub({
       collections: [
-        { docs: 'posts', slugOverride: 'post' }, // Custom slug used for Dub folder and shortlinks
+        { docs: 'posts', slugOverride: 'post' }, // Custom slug used for folder and shortlinks
         { docs: 'insights', slugOverride: 'insight' }, // Custom slug only
         { docs: 'news' }, // Default behavior
       ],
-      dubApiKey: process.env.DUB_API_KEY || '',
-      siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-      domain: 'mycustomdomain.com', // Optional: custom Dub domain
-      tenantId: '12345', // Optional: tenant identifier for Dub workspace
-      isPro: false, // Optional: pro flag to enable disable pro features
+      dubApiKey: process.env.DUB_API_KEY!,
+      siteUrl: process.env.NEXT_PUBLIC_SITE_URL!,
+      domain: 'mycustomdomain.com', // Optional: assign a custom domain
+      tenantId: '12345', // Optional: tenant identifier for workspace
+      isPro: false, // Optional: pro flag to enable/disable pro features
 
       // Optional: overrides of dubCollection
       dubCollection: {
@@ -66,14 +66,14 @@ export default buildConfig({
 
 ## Notes
 
-If you do not provide overrides, the plugin defaults to:
+If you do not provide optional overrides, the plugin defaults to:
 
-- dubLinks readable by all
-- Tags are readable, editable, and deletable by all users by default
+- Links readable by all
+- Tags are readable, editable, and deletable by all logged in users
 
 ## Features
 
-- **Automation**: Generates and updates Dub shortlinks when documents are published or slugs change.
+- **Automation**: Generates and updates shortlinks when documents are published or slugs change.
 - **Folders**: Collections are organised in folders (Pro).
 - **Tags**: Tags can be created and removed directly in Payload.
 - **Sync**: Keeps Payload and Dub data consistent with minimal overhead.
