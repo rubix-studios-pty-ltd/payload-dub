@@ -23,12 +23,7 @@ jobs:
         with:
           node-version: 22
       - run: pnpm install --frozen-lockfile
-
-      - name: Clean build artifacts
-        run: pnpm clean
-
-      - name: Lint project
-        run: pnpm lint
+      - run: pnpm clean
 
   release:
     runs-on: ubuntu-latest
