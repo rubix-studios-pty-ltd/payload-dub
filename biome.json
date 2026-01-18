@@ -449,7 +449,7 @@
             "noInvalidUseBeforeDeclaration": "off",
             "noUnusedVariables": "warn"
           },
-          "style": { "noDoneCallback": "error", "useBlockStatements": "warn" },
+          "style": { "noDoneCallback": "error", "useBlockStatements": "off" },
           "suspicious": {
             "noConsole": "warn",
             "noExplicitAny": "warn",
