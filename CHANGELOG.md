@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.5.2...v1.5.3) (2026-01-23)
+
+
+### Bug Fixes
+
+* update linter style rule to disable useBlockStatements warning ([37f4220](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/37f42205e06788270266e5eea48917ab11310ce0))
+
 ## [1.5.2](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.5.1...v1.5.2) (2026-01-15)
 
 
