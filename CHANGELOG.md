@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.4](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.5.3...v1.5.4) (2026-01-26)
+
+
+### Bug Fixes
+
+* update package versions for lru-cache, tempy, and undici (CVE) ([92203ef](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/92203efd0ec770ec82f31a432cfb842a423fde8a))
+
 ## [1.5.3](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.5.2...v1.5.3) (2026-01-23)
 
 
