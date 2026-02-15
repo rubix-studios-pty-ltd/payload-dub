@@ -86,7 +86,7 @@
     }
   },
   "dependencies": {
-    "dub": "^0.71.2"
+    "dub": "^0.71.3"
   },
   "packageManager": "pnpm@10.29.3"
 }
