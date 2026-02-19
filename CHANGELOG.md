@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.0...v1.6.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* update biome schema version and adjust TypeScript dependencies in pnpm-lock.yaml ([b0b6a2e](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/b0b6a2e8846f98475501235ec50d2b1e772710cf))
+* update ignore patterns in biome.json and bump dub dependency to 0.71.3 ([491efda](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/491efda07e7904825c9c1d636a8f4183acaf604d))
+
 # [1.6.0](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.5.6...v1.6.0) (2026-02-14)
 
 
