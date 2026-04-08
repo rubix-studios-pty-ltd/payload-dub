@@ -147,9 +147,7 @@ export const payloadDub =
         typeof col === 'string' ? col === collection.slug : col.docs === collection.slug
       )
 
-      if (!configMatch) {
-        return collection
-      }
+      if (!configMatch) return collection
 
       let targetSlug: string
 
