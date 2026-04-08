@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.3](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.2...v1.6.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* **dep:** update dub dep ([6813a38](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/6813a38cbf5ad1bc7c720928ad3ddb7632f1b9e8))
+
 ## [1.6.2](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.1...v1.6.2) (2026-03-23)
 
 
