@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.4](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.3...v1.6.4) (2026-04-08)
+
+
+### Bug Fixes
+
+* **release:** force release patch typescript 6.0.2 ([061ea79](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/061ea7996d39642b09bb0288428120f1e40d5c3a))
+
 ## [1.6.3](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.2...v1.6.3) (2026-04-08)
 
 
