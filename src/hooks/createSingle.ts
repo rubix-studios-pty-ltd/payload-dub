@@ -1,20 +1,20 @@
-import { type Dub } from 'dub'
 import { type CollectionAfterChangeHook } from 'payload'
 
 import { type DubFolder, type DubTags, type DubTypes } from '../types.js'
+import { type GetDub } from '../utils/dubClient.js'
 
 export const createSingle =
   ({
     slug,
     domain,
-    dub,
+    getDub,
     isPro = false,
     originalSlug,
     siteUrl,
     tenantId,
   }: {
     domain?: string
-    dub: Dub
+    getDub: GetDub
     isPro?: boolean
     originalSlug: string
     siteUrl: string
@@ -39,7 +39,9 @@ export const createSingle =
       let folderId: string | undefined
 
       if (isPro === true) {
+        const dub = await getDub()
         const folders = await dub.folders.list()
+
         let folder = folders.find((f: DubFolder) => f.name === originalSlug)
         if (!folder) {
           folder = await dub.folders.create({ name: originalSlug })
@@ -108,6 +110,7 @@ export const createSingle =
       let urlMismatch = false
 
       if (existingShort) {
+        const dub = await getDub()
         const currentDub = await dub.links.get({ externalId })
 
         const dubTagCurrent: string[] = Array.isArray(currentDub?.tags)
@@ -136,12 +139,14 @@ export const createSingle =
 
       let updated
 
-      const existing = await dub.links.get({ externalId }).catch(() => null)
+      const existing = await getDub()
+        .then((dub) => dub.links.get({ externalId }))
+        .catch(() => null)
 
       if (existing) {
-        updated = await dub.links.update(externalId, data)
+        updated = await getDub().then((dub) => dub.links.update(externalId, data))
       } else {
-        updated = await dub.links.create(data)
+        updated = await getDub().then((dub) => dub.links.create(data))
       }
 
       const requiresSync =

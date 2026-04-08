@@ -1,10 +1,10 @@
-import { Dub } from 'dub'
 import { type CollectionConfig, type Config, type Field } from 'payload'
 
 import { createSingle } from './hooks/createSingle.js'
 import { manageLinks } from './hooks/manageLinks.js'
 import { manageTags } from './hooks/manageTags.js'
 import { DubColors, type DubConfig } from './types.js'
+import { dubClient } from './utils/dubClient.js'
 
 export const payloadDub =
   (pluginConfig: DubConfig) =>
@@ -14,10 +14,10 @@ export const payloadDub =
     }
 
     const enabled = pluginConfig.collections
-    const dub = new Dub({ token: pluginConfig.dubApiKey })
+    const getDub = dubClient(pluginConfig.dubApiKey)
 
-    const tagHooks = manageTags(dub)
-    const linkHooks = manageLinks(dub)
+    const tagHooks = manageTags(getDub)
+    const linkHooks = manageLinks(getDub)
 
     const linksFields: Field[] = [
       {
@@ -220,7 +220,7 @@ export const payloadDub =
             createSingle({
               slug: targetSlug,
               domain: pluginConfig.domain,
-              dub,
+              getDub,
               isPro: pluginConfig.isPro || false,
               originalSlug: collection.slug,
               siteUrl: pluginConfig.siteUrl,
