@@ -36,12 +36,12 @@ export const createSingle =
     }
 
     try {
+      const dub = await getDub()
+
       let folderId: string | undefined
 
       if (isPro === true) {
-        const dub = await getDub()
         const folders = await dub.folders.list()
-
         let folder = folders.find((f: DubFolder) => f.name === originalSlug)
         if (!folder) {
           folder = await dub.folders.create({ name: originalSlug })
@@ -137,16 +137,14 @@ export const createSingle =
         ...(tid ? { tenantId: tid } : {}),
       }
 
+      const existing = await dub.links.get({ externalId }).catch(() => null)
+
       let updated
 
-      const existing = await getDub()
-        .then((dub) => dub.links.get({ externalId }))
-        .catch(() => null)
-
       if (existing) {
-        updated = await getDub().then((dub) => dub.links.update(externalId, data))
+        updated = await dub.links.update(externalId, data)
       } else {
-        updated = await getDub().then((dub) => dub.links.create(data))
+        updated = await dub.links.create(data)
       }
 
       const requiresSync =
