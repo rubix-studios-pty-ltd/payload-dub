@@ -20,6 +20,7 @@ export const manageTags = (getDub: GetDub) => {
 
     try {
       const dub = await getDub()
+
       let tagID: string
 
       if (originalDoc?.tagID) {
@@ -53,6 +54,7 @@ export const manageTags = (getDub: GetDub) => {
 
     try {
       const dub = await getDub()
+
       await dub.tags.delete(doc.tagID)
     } catch (error) {
       payload.logger?.error?.({ error, message: 'Tag delete failed' })
