@@ -1,9 +1,9 @@
+import { type Dub } from 'dub'
 import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 'payload'
 
 import { type DubTypes } from '../types.js'
-import { type GetDub } from '../utils/dubClient.js'
 
-export const manageLinks = (getDub: GetDub) => {
+export const manageLinks = (dub: Dub) => {
   const beforeChange: CollectionBeforeChangeHook = async ({
     context,
     data,
@@ -21,8 +21,6 @@ export const manageLinks = (getDub: GetDub) => {
     const externalId = data.externalId || originalDoc.externalId
 
     try {
-      const dub = await getDub()
-
       const exists = await dub.links.get({ externalId }).catch(() => null)
 
       const payloadTagIds = Array.isArray(data.dubTags)
@@ -79,8 +77,6 @@ export const manageLinks = (getDub: GetDub) => {
     }
 
     try {
-      const dub = await getDub()
-
       await dub.links.delete(doc.externalId)
     } catch (error) {
       payload.logger.error({ error, message: 'Dub link delete failed' })

@@ -1,9 +1,9 @@
+import { type Dub } from 'dub'
 import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 'payload'
 
 import { type DubTagColor } from '../types.js'
-import { type GetDub } from '../utils/dubClient.js'
 
-export const manageTags = (getDub: GetDub) => {
+export const manageTags = (dub: Dub) => {
   const beforeChange: CollectionBeforeChangeHook = async ({
     context,
     data,
@@ -19,8 +19,6 @@ export const manageTags = (getDub: GetDub) => {
     }
 
     try {
-      const dub = await getDub()
-
       let tagID: string
 
       if (originalDoc?.tagID) {
@@ -53,8 +51,6 @@ export const manageTags = (getDub: GetDub) => {
     }
 
     try {
-      const dub = await getDub()
-
       await dub.tags.delete(doc.tagID)
     } catch (error) {
       payload.logger?.error?.({ error, message: 'Tag delete failed' })

@@ -1,20 +1,20 @@
+import { type Dub } from 'dub'
 import { type CollectionAfterChangeHook } from 'payload'
 
 import { type DubFolder, type DubTags, type DubTypes } from '../types.js'
-import { type GetDub } from '../utils/dubClient.js'
 
 export const createSingle =
   ({
     slug,
     domain,
-    getDub,
+    dub,
     isPro = false,
     originalSlug,
     siteUrl,
     tenantId,
   }: {
     domain?: string
-    getDub: GetDub
+    dub: Dub
     isPro?: boolean
     originalSlug: string
     siteUrl: string
@@ -36,8 +36,6 @@ export const createSingle =
     }
 
     try {
-      const dub = await getDub()
-
       let folderId: string | undefined
 
       if (isPro === true) {
@@ -110,7 +108,6 @@ export const createSingle =
       let urlMismatch = false
 
       if (existingShort) {
-        const dub = await getDub()
         const currentDub = await dub.links.get({ externalId })
 
         const dubTagCurrent: string[] = Array.isArray(currentDub?.tags)
@@ -137,9 +134,9 @@ export const createSingle =
         ...(tid ? { tenantId: tid } : {}),
       }
 
-      const existing = await dub.links.get({ externalId }).catch(() => null)
-
       let updated
+
+      const existing = await dub.links.get({ externalId }).catch(() => null)
 
       if (existing) {
         updated = await dub.links.update(externalId, data)
