@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [1.7.0](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.5...v1.7.0) (2026-04-21)
+
+
+### Features
+
+* **dep:** update payload and relavant packages ([48e3daa](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/48e3daaa7bfedf04df39fbe0679973fa8d6e11d9))
+
 ## [1.6.5](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.6.4...v1.6.5) (2026-04-10)
 
 
