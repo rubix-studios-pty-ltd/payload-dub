@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.4.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -63,7 +63,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false
+      "recommended": false,
+      "style": {
+        "useImportType": {
+          "level": "on",
+          "options": {
+            "style": "inlineType"
+          }
+        }
+      }
     },
     "includes": [
       "**",
@@ -78,8 +86,6 @@
       "!**/*.test.ts",
       "!**/tsconfig.tsbuildinfo",
       "!**/README.md",
-      "!**/eslint.config.js",
-      "!**/payload-types.ts",
       "!**/dist/",
       "!**/.yarn/",
       "!**/build/",
@@ -510,7 +516,20 @@
   "assist": {
     "enabled": true,
     "actions": {
-      "source": { "organizeImports": "on" }
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":NODE:", ":BUN:", ":PACKAGE:", "react", "react/**", "react-*", "react-*/**"],
+              ":BLANK_LINE:",
+              ["**", "!**/*.css", "!**/*.scss"],
+              ":BLANK_LINE:",
+              ["**/*.css", "**/*.scss"]
+            ]
+          }
+        }
+      }
     }
   }
 }
