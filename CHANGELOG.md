@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [1.8.0](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.7.2...v1.8.0) (2026-05-22)
+
+
+### Bug Fixes
+
+* **deps:** update pnpm and package dependencies to latest versions ([45671b6](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/45671b679160e21c7822fddf6913019f844bfab7))
+* **deps:** update pnpm version and graphql dependency; add pnpm workspace configuration ([0c6bccb](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/0c6bccb8ad0be083e2ba288ac4ea7cc51dbc691f))
+* release pipeline and update packages ([3006463](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/30064634c06d7c06f18278f6893d04bed4074767))
+* **release:** update branch name from 'development' to 'dev' ([124d79f](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/124d79fd985b388c6d04271b55edd7c6af396384))
+
+
+### Features
+
+* **linter:** enhance style rules and organize imports configuration ([4ce450b](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/4ce450b74c81639a33a4bdb5fac2f76ae9bf7be2))
+
 ## [1.7.2](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.7.1...v1.7.2) (2026-04-28)
 
 
