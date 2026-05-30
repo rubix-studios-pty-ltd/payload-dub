@@ -52,7 +52,7 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.15",
+    "@biomejs/biome": "2.4.16",
     "@payloadcms/eslint-config": "^3.28.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
@@ -87,7 +87,7 @@
     }
   },
   "dependencies": {
-    "dub": "^0.71.7"
+    "dub": "^0.72.0"
   },
-  "packageManager": "pnpm@11.3.0"
+  "packageManager": "pnpm@11.5.0"
 }
