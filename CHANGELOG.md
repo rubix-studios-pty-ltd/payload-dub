@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.3](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.2...v1.8.3) (2026-07-01)
+
+
+### Performance Improvements
+
+* update devDependencies to latest versions in package.json and pnpm-lock.yaml ([2dd62fa](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/2dd62fa112fe0f5e2422ccd07f07012215b9d081))
+
 ## [1.8.2](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.1...v1.8.2) (2026-05-30)
 
 
