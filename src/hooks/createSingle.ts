@@ -164,7 +164,7 @@ export const createSingle =
         })
       }
     } catch (error) {
-      payload.logger.error({ error, message: 'Error creating/updating Dub link' })
+      payload.logger.error({ error, message: 'Failed: Error creating/updating Dub link' })
     }
 
     return doc
