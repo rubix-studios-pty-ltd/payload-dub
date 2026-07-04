@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.5](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.4...v1.8.5) (2026-07-04)
+
+
+### Bug Fixes
+
+* remove depency on payloadcms eslint ([3c303c4](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/3c303c4aa0e76905ac861e92f88e1cbddfacc220))
+
 ## [1.8.4](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.3...v1.8.4) (2026-07-04)
 
 
