@@ -52,7 +52,7 @@ export const manageLinks = (dub: Dub) => {
       } else {
         if (!data.url) {
           payload.logger.warn({
-            message: `Missing URL for link creation: ${externalId}`,
+            message: `Failed: Missing URL for link creation: ${externalId}`,
           })
           return data
         }
@@ -66,7 +66,7 @@ export const manageLinks = (dub: Dub) => {
 
       return data
     } catch (error) {
-      payload.logger.error({ error, message: 'Dub link update failed' })
+      payload.logger.error({ error, message: 'Failed: Dub link update failed' })
       return data
     }
   }
@@ -79,7 +79,7 @@ export const manageLinks = (dub: Dub) => {
     try {
       await dub.links.delete(doc.externalId)
     } catch (error) {
-      payload.logger.error({ error, message: 'Dub link delete failed' })
+      payload.logger.error({ error, message: 'Failed: Dub link delete failed' })
     }
   }
 

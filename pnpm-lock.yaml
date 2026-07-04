@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       dub:
-        specifier: ^0.72.1
-        version: 0.72.1
+        specifier: ^0.73.0
+        version: 0.73.0
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.2
@@ -518,8 +518,8 @@ packages:
     resolution: {integrity: sha512-xJIPs+bYuc9ASBl+cvGsKbGrJmS6fAKaSZCnT0lhahT5rhA2VVy9/EcIgd2JhtEuFOJNx7UHNn/qiTPTY4nrQw==}
     engines: {node: '>= 10'}
 
-  '@next/env@15.5.19':
-    resolution: {integrity: sha512-sWWluFvcv5v3Fxznmf2ZfjyoVQt/64oCnYqS90inQWGzMPK1VjvekPiz3OPHKmFT30EnHrjlbyaHLt3M0vWabw==}
+  '@next/env@15.5.20':
+    resolution: {integrity: sha512-dXh51Wvddf8daEyBXryZZEe1FdVxEWx9lgaTseLZUtC1XP/W8Wri+Z+VPOElHlByk23CyqHdc2oVByX7wsTWsw==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1370,8 +1370,8 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dub@0.72.1:
-    resolution: {integrity: sha512-UCf8iB9/H/r+tsQH1HeGwAicBIUDnM8ogEsrNN344LdfRXX9bz1P8BhhGaGXefFzfT3FqI4KgH1O+mCH/VkW7g==}
+  dub@0.73.0:
+    resolution: {integrity: sha512-iOk0dklLTzntSZnNlyLOODC8C2yv1puYKB+pMWILuWOml4EvuIDDaCSjtaA2ZE4VpH4jIxsFn6knEfHzswpcVQ==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2690,8 +2690,8 @@ packages:
     resolution: {integrity: sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==}
     engines: {node: '>=8.6'}
 
-  picomatch@4.0.4:
-    resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
+  picomatch@4.0.5:
+    resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
     engines: {node: '>=12'}
 
   pify@3.0.0:
@@ -3688,7 +3688,7 @@ snapshots:
     dependencies:
       '@eslint-react/eff': 1.31.0
       '@typescript-eslint/utils': 8.62.1(eslint@9.22.0)(typescript@5.7.3)
-      picomatch: 4.0.4
+      picomatch: 4.0.5
       ts-pattern: 5.9.0
     transitivePeerDependencies:
       - eslint
@@ -3842,7 +3842,7 @@ snapshots:
       '@napi-rs/nice-win32-x64-msvc': 1.1.1
     optional: true
 
-  '@next/env@15.5.19': {}
+  '@next/env@15.5.20': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -4919,7 +4919,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dub@0.72.1:
+  dub@0.73.0:
     dependencies:
       jsonpath-rfc9535: 1.1.0
       zod: 4.4.3
@@ -5456,9 +5456,9 @@ snapshots:
     dependencies:
       reusify: 1.1.0
 
-  fdir@6.5.0(picomatch@4.0.4):
+  fdir@6.5.0(picomatch@4.0.5):
     optionalDependencies:
-      picomatch: 4.0.4
+      picomatch: 4.0.5
 
   figures@2.0.0:
     dependencies:
@@ -6314,7 +6314,7 @@ snapshots:
 
   payload@3.85.2(graphql@16.14.0)(typescript@6.0.3):
     dependencies:
-      '@next/env': 15.5.19
+      '@next/env': 15.5.20
       '@payloadcms/translations': 3.85.2
       '@types/busboy': 1.5.4
       ajv: 8.18.0
@@ -6358,7 +6358,7 @@ snapshots:
 
   picomatch@2.3.2: {}
 
-  picomatch@4.0.4: {}
+  picomatch@4.0.5: {}
 
   pify@3.0.0: {}
 
@@ -6936,8 +6936,8 @@ snapshots:
 
   tinyglobby@0.2.17:
     dependencies:
-      fdir: 6.5.0(picomatch@4.0.4)
-      picomatch: 4.0.4
+      fdir: 6.5.0(picomatch@4.0.5)
+      picomatch: 4.0.5
 
   to-regex-range@5.0.1:
     dependencies:

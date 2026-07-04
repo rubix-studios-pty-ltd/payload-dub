@@ -40,7 +40,7 @@ export const manageTags = (dub: Dub) => {
       data.tagID = tagID
       return data
     } catch (error) {
-      payload.logger.error({ error, message: 'Tag create/update failed' })
+      payload.logger.error({ error, message: 'Failed: Tag create/update failed' })
       return data
     }
   }
@@ -53,7 +53,7 @@ export const manageTags = (dub: Dub) => {
     try {
       await dub.tags.delete(doc.tagID)
     } catch (error) {
-      payload.logger?.error?.({ error, message: 'Tag delete failed' })
+      payload.logger?.error?.({ error, message: 'Failed: Tag delete failed' })
     }
   }
 
