@@ -10,7 +10,7 @@ importers:
     dependencies:
       dub:
         specifier: ^0.73.0
-        version: 0.73.0
+        version: 0.73.1
     devDependencies:
       '@biomejs/biome':
         specifier: 2.5.2
@@ -1027,8 +1027,8 @@ packages:
     resolution: {integrity: sha512-QM8q3zDe58hqUqjraQOmzZ1LIH9SWQJTlEKCH4kJ2oQvLZk7RbQXvtDM2XEq3fwkV9CCvvH4LA0AV+ogFsBM2Q==}
     engines: {node: '>=8'}
 
-  dub@0.73.0:
-    resolution: {integrity: sha512-iOk0dklLTzntSZnNlyLOODC8C2yv1puYKB+pMWILuWOml4EvuIDDaCSjtaA2ZE4VpH4jIxsFn6knEfHzswpcVQ==}
+  dub@0.73.1:
+    resolution: {integrity: sha512-io9SenvKTE8x7zJWD5WuvuI8Qjddo+FZbkrn1z4xOW/Ouup4iaYQgLROzMtPANyInYZjWhT70ZZ4inn9Jjj9Hg==}
 
   duplexer2@0.1.4:
     resolution: {integrity: sha512-asLFVfWWtJ90ZyOUHMqk7/S2w2guQKxUI2itj3d92ADHhxUSbCMGi1f1cBcJ7xM1To+pE/Khbwo1yuNbMEPKeA==}
@@ -3236,7 +3236,7 @@ snapshots:
     dependencies:
       is-obj: 2.0.0
 
-  dub@0.73.0:
+  dub@0.73.1:
     dependencies:
       jsonpath-rfc9535: 1.1.0
       zod: 4.4.3
