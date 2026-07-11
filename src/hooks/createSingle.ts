@@ -134,15 +134,11 @@ export const createSingle =
         ...(tid ? { tenantId: tid } : {}),
       }
 
-      let updated
-
       const existing = await dub.links.get({ externalId }).catch(() => null)
 
-      if (existing) {
-        updated = await dub.links.update(externalId, data)
-      } else {
-        updated = await dub.links.create(data)
-      }
+      const updated = existing
+        ? await dub.links.update(externalId, data)
+        : await dub.links.create(data)
 
       const requiresSync =
         !existingShort ||
@@ -164,7 +160,7 @@ export const createSingle =
         })
       }
     } catch (error) {
-      payload.logger.error({ error, message: 'Failed: Error creating/updating Dub link' })
+      payload.logger.error({ error, message: 'Failed: Error creating/updating shortlink' })
     }
 
     return doc
