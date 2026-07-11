@@ -1,5 +1,5 @@
-import { Dub } from 'dub'
 import { type CollectionConfig, type Config, type Field } from 'payload'
+import { Dub } from 'dub'
 
 import { createSingle } from './hooks/createSingle.js'
 import { manageLinks } from './hooks/manageLinks.js'

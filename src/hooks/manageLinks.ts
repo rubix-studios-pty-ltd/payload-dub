@@ -1,5 +1,5 @@
-import { type Dub } from 'dub'
 import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 'payload'
+import { type Dub } from 'dub'
 
 import { type DubTypes } from '../types.js'
 
@@ -52,7 +52,7 @@ export const manageLinks = (dub: Dub) => {
       } else {
         if (!data.url) {
           payload.logger.warn({
-            message: `Failed: Missing URL for link creation: ${externalId}`,
+            message: `Failed: Missing URL for shortlink creation: ${externalId}`,
           })
           return data
         }
@@ -66,7 +66,7 @@ export const manageLinks = (dub: Dub) => {
 
       return data
     } catch (error) {
-      payload.logger.error({ error, message: 'Failed: Dub link update failed' })
+      payload.logger.error({ error, message: 'Failed: Shortlink update failed' })
       return data
     }
   }
@@ -79,7 +79,7 @@ export const manageLinks = (dub: Dub) => {
     try {
       await dub.links.delete(doc.externalId)
     } catch (error) {
-      payload.logger.error({ error, message: 'Failed: Dub link delete failed' })
+      payload.logger.error({ error, message: 'Failed: Shortlink delete failed' })
     }
   }
 
