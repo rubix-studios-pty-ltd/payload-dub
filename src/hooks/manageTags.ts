@@ -1,5 +1,5 @@
-import { type Dub } from 'dub'
 import { type CollectionAfterDeleteHook, type CollectionBeforeChangeHook } from 'payload'
+import { type Dub } from 'dub'
 
 import { type DubTagColor } from '../types.js'
 

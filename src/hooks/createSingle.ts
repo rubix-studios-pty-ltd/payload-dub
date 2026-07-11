@@ -1,5 +1,5 @@
-import { type Dub } from 'dub'
 import { type CollectionAfterChangeHook } from 'payload'
+import { type Dub } from 'dub'
 
 import { type DubFolder, type DubTags, type DubTypes } from '../types.js'
 
