@@ -1,6 +1,6 @@
 {
   "name": "@rubixstudios/payload-dub",
-  "version": "1.0.0",
+  "version": "1.8.6",
   "description": "A Payload CMS plugin that integrates with Dub to automatically create and manage shortlinks for your content.",
   "license": "MIT",
   "author": "Rubix Studios <hello@rubixstudios.com.au> (https://rubixstudios.com.au)",
@@ -42,7 +42,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pnpm build:types && pnpm build:swc",
     "build:swc": "swc ./src -d ./dist --config-file .swcrc --strip-leading-paths",
