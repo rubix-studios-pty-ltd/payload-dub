@@ -33,6 +33,7 @@
       {
         "assets": ["dist/**"]
       }
-    ]
+    ],
+    "@semantic-release/github"
   ]
 }
