@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [2.0.0](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.9.1...v2.0.0) (2026-10-10)
+
+
+### Features
+
+* support Payload CMS v4 ([598af8f](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/598af8f0630387231030696ecd83f472211f59db))
+
+
+### BREAKING CHANGES
+
+* Payload CMS v3 is no longer supported on the main branch.
+
 ## [1.9.1](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.9.0...v1.9.1) (2026-10-10)
 
 
