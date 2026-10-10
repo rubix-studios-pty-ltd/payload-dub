@@ -68,13 +68,19 @@
     "enabled": true,
     "rules": {
       "preset": "recommended",
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useMediaCaption": "off",
+        "useSemanticElements": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "off"
+      },
+      "suspicious": {
+        "noImplicitAnyLet": "off"
+      },
       "style": {
-        "useImportType": {
-          "level": "on",
-          "options": {
-            "style": "inlineType"
-          }
-        }
+        "useImportType": "off"
       }
     },
     "includes": [

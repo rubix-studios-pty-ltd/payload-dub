@@ -3,6 +3,7 @@ import { Dub } from 'dub'
 
 import { getLinks } from './fields/links.js'
 import { getTags } from './fields/tags.js'
+import { getAnalytics } from './globals/analytics.js'
 import { createSingle } from './hooks/createSingle.js'
 import { manageLinks } from './hooks/manageLinks.js'
 import { manageTags } from './hooks/manageTags.js'
@@ -198,8 +199,16 @@ export const payloadDub =
       }
     })
 
+    const analytics = getAnalytics({
+      dubApiKey: pluginConfig.dubApiKey,
+      isPro: pluginConfig.isPro,
+      linksSlug,
+      tenantId: pluginConfig.tenantId,
+    })
+
     return {
       ...incomingConfig,
       collections: [...collections, dubLinks, dubTags],
+      globals: [...(incomingConfig.globals || []), analytics],
     }
   }

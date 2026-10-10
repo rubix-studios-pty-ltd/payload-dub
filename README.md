@@ -12,7 +12,14 @@ Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
 ## Compatibility
 
-This plugin supports **Payload CMS v3 and v4** using the same package and configuration. No separate installation or migration is required when using either version.
+The plugin maintains two release lines, with Payload CMS v4 as the primary release and Payload CMS v3 maintained separately.
+
+| Payload CMS | Plugin version | Release branch | npm dist-tag |
+| --- | --- | --- | --- |
+| v4 | 2.x | `main` | `latest` |
+| v3 | 1.x | `payload-v3` | `payload-v3` |
+
+Install the release matching your Payload version. The `latest` tag targets Payload v4 after the v4 release is published.
 
 ## Installation
 
