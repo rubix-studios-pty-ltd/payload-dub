@@ -10,6 +10,8 @@ Dub is the modern, open-source link attribution platform for short links, conver
 
 Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
+<img width="1912" height="914" alt="Link Analytics Dashboard" src="https://github.com/user-attachments/assets/a465f62a-6d9d-440d-a693-b0a10f9e9cdc" />
+
 ## Compatibility
 
 The plugin maintains two release lines, with Payload CMS v4 as the primary release and Payload CMS v3 maintained separately.
