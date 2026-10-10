@@ -1,4 +1,4 @@
-import { type CollectionConfig, type CollectionSlug, type Field } from 'payload'
+import { type CollectionConfig, type CollectionSlug, type Field, type GlobalConfig } from 'payload'
 import { type Dub } from 'dub'
 
 export type ClosedEnum<T> = T[keyof T]
@@ -61,6 +61,9 @@ export type DubConfig = {
   }
   dubTagCollection?: {
     overrides?: CollectionOverride
+  }
+  dubAnalytics?: {
+    overrides?: Partial<GlobalConfig>
   }
   isPro?: boolean
   siteUrl: string

@@ -4,6 +4,7 @@ type Props = {
   dubApiKey: string
   isPro?: boolean
   linksSlug: CollectionSlug
+  overrides?: Partial<GlobalConfig>
   tenantId?: string
 }
 
@@ -11,14 +12,17 @@ export function getAnalytics({
   dubApiKey,
   isPro = false,
   linksSlug,
+  overrides,
   tenantId,
 }: Props): GlobalConfig {
   return {
-    slug: 'dubAnalytics',
-    label: 'Analytics',
+    ...overrides,
+    slug: overrides?.slug || 'dubAnalytics',
+    label: overrides?.label || 'Analytics',
     access: {
       read: ({ req }) => Boolean(req.user && req.user.collection === req.payload.config.admin.user),
       update: () => false,
+      ...overrides?.access,
     },
     admin: {
       group: 'Dub',
@@ -39,7 +43,8 @@ export function getAnalytics({
           },
         },
       },
+      ...overrides?.admin,
     },
-    fields: [],
+    fields: overrides?.fields ?? [],
   }
 }

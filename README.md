@@ -72,6 +72,16 @@ export default buildConfig({
           },
         },
       },
+      dubAnalytics: {
+        overrides: {
+          access: {
+            read: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+          },
+        },
+      },
     }),
   ],
 })
@@ -89,6 +99,7 @@ If you do not provide optional overrides, the plugin defaults to:
 - **Automation**: Generates and updates shortlinks when documents are published or slugs change.
 - **Folders**: Collections are organised in folders (Pro).
 - **Tags**: Tags can be created and removed directly in Payload.
+- **Analytics**: Dashboard for campaign attribution, with advanced reporting (Pro).
 - **Sync**: Keeps Payload and Dub data consistent with minimal overhead.
 - **Configurable**: Supports per-collection overrides for color, slug, and URL base.
 - **Access Control**: Access, field and admin overrides for complete CMS control.

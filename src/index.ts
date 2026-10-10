@@ -203,6 +203,7 @@ export const payloadDub =
       dubApiKey: pluginConfig.dubApiKey,
       isPro: pluginConfig.isPro,
       linksSlug,
+      overrides: pluginConfig.dubAnalytics?.overrides,
       tenantId: pluginConfig.tenantId,
     })
 

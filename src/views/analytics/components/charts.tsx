@@ -1,4 +1,3 @@
-
 'use client'
 
 import React, { type CSSProperties } from 'react'
@@ -135,12 +134,7 @@ export function RankingChart({
             formatter={(value) => [formatNumber(Number(value)), 'Clicks']}
           />
 
-          <Bar
-            dataKey="clicks"
-            fill="var(--dub-accent)"
-            maxBarSize={24}
-            radius={[0, 5, 5, 0]}
-          />
+          <Bar dataKey="clicks" fill="var(--dub-accent)" maxBarSize={24} radius={[0, 5, 5, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
