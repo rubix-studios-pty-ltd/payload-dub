@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.7](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.6...v1.8.7) (2026-10-10)
+
+
+### Bug Fixes
+
+* github asset release ([6093186](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/60931860ef4ee0e5852c9f2d9940c0c5287a29c1))
+
+
+### Features
+
+* streamline plugin configuration and enhance tag management ([1d7a190](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/1d7a190532b1b1d4bf236fdb830e912df280d119))
+* streamline plugin configuration and enhance tag management ([82f7840](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/82f7840b6db6639f76d210539823c7aac365b088))
+
 ## [1.8.6](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.5...v1.8.6) (2026-09-18)
 
 
