@@ -10,6 +10,10 @@ Dub is the modern, open-source link attribution platform for short links, conver
 
 Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
+## Compatibility
+
+This plugin supports **Payload CMS v3 and v4** using the same package and configuration. No separate installation or migration is required when using either version.
+
 ## Installation
 
 ```sh
