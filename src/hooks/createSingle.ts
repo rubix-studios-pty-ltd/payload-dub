@@ -1,7 +1,21 @@
-import { type CollectionAfterChangeHook } from 'payload'
+import { type CollectionAfterChangeHook, type CollectionSlug } from 'payload'
 import { type Dub } from 'dub'
 
-import { type DubFolder, type DubTags, type DubTypes } from '../types.js'
+import { type DubTags, type DubTypes } from '../types.js'
+import { getLink } from '../utils/getLink.js'
+import { matches } from '../utils/matches.js'
+
+type Props = {
+  domain?: string
+  dub: Dub
+  isPro?: boolean
+  linksSlug?: CollectionSlug
+  originalSlug: string
+  siteUrl: string
+  slug: string
+  tagsSlug?: CollectionSlug
+  tenantId?: string
+}
 
 export const createSingle =
   ({
@@ -9,52 +23,93 @@ export const createSingle =
     domain,
     dub,
     isPro = false,
+    linksSlug = 'dubLinks',
     originalSlug,
     siteUrl,
+    tagsSlug = 'dubTags',
     tenantId,
-  }: {
-    domain?: string
-    dub: Dub
-    isPro?: boolean
-    originalSlug: string
-    siteUrl: string
-    slug: string
-    tenantId?: string
-  }): CollectionAfterChangeHook =>
-  async ({
-    context,
-    doc,
-    operation,
-    req: { payload },
-  }: Parameters<CollectionAfterChangeHook>[0]) => {
-    if (context?.skipDubHook) {
+  }: Props): CollectionAfterChangeHook =>
+  async ({ collection, context, doc, operation, req }) => {
+    const drafts = Boolean(collection.versions?.drafts)
+
+    if (
+      context?.skipDubHook ||
+      !['create', 'update'].includes(operation) ||
+      (drafts && doc._status !== 'published')
+    ) {
       return doc
     }
 
-    if (!['create', 'update'].includes(operation) || doc._status !== 'published') {
-      return doc
-    }
+    const { payload } = req
 
     try {
-      let folderId: string | undefined
-
-      if (isPro === true) {
-        const folders = await dub.folders.list()
-        let folder = folders.find((f: DubFolder) => f.name === originalSlug)
-        if (!folder) {
-          folder = await dub.folders.create({ name: originalSlug })
-        }
-        folderId = folder.id
-      }
-
       const lookup = await payload.find({
-        collection: 'dubLinks',
+        collection: linksSlug,
+        depth: 0,
         limit: 1,
         overrideAccess: true,
-        where: { 'source.value': { equals: doc.id } },
+        req,
+        where: {
+          and: [
+            { 'source.relationTo': { equals: originalSlug } },
+            { 'source.value': { equals: doc.id } },
+          ],
+        },
       })
 
-      const linkDoc = lookup.docs[0]
+      const link =
+        lookup.docs[0] ||
+        (await payload.create({
+          collection: tagsSlug,
+          context: { ...context, skipDubHook: true },
+          data: {
+            source: {
+              relationTo: originalSlug,
+              value: doc.id,
+            },
+          },
+          depth: 0,
+          overrideAccess: true,
+          req,
+        }))
+
+      const document = doc as DubTags
+
+      const payloadTagIds = [
+        ...new Set(
+          Array.isArray(document.dubTags)
+            ? document.dubTags
+                .map((tag) => (typeof tag === 'object' && tag !== null ? tag.id : tag))
+                .filter(
+                  (id): id is string | number =>
+                    typeof id === 'number' || (typeof id === 'string' && id.length > 0)
+                )
+            : []
+        ),
+      ]
+
+      const tags = payloadTagIds.length
+        ? await payload.find({
+            collection: tagsSlug,
+            depth: 0,
+            limit: payloadTagIds.length,
+            overrideAccess: true,
+            req,
+            where: { id: { in: payloadTagIds } },
+          })
+        : null
+
+      const dubTagIds = [
+        ...new Set(
+          tags?.docs
+            .map((tag) => tag.tagID)
+            .filter((id): id is string => typeof id === 'string' && id.length > 0) ?? []
+        ),
+      ]
+
+      const externalId = link.externalId?.startsWith('ext_')
+        ? link.externalId
+        : `ext_${link.externalId || `${slug}_${link.id}`}`
 
       const tid = tenantId
         ? tenantId.startsWith('user_')
@@ -62,105 +117,76 @@ export const createSingle =
           : `user_${tenantId}`
         : undefined
 
-      const existingShort = linkDoc?.shortLink
-
-      const document = doc as DubTags
-
-      const payloadTagIds = Array.isArray(document.dubTags)
-        ? document.dubTags.map((t) => (typeof t === 'string' ? t : t.id)).filter(Boolean)
-        : []
-
-      const dubTagsQuery = payloadTagIds.length
-        ? await payload.find({
-            collection: 'dubTags',
-            limit: payloadTagIds.length,
-            overrideAccess: true,
-            where: { id: { in: payloadTagIds } },
-          })
-        : null
-
-      const dubTagIds =
-        dubTagsQuery?.docs?.map((tag) => tag.tagID).filter((id): id is string => Boolean(id)) ?? []
-
-      const link =
-        linkDoc ||
-        (await payload.create({
-          collection: 'dubLinks',
-          context: {
-            skipDubHook: true,
-          },
-          data: {
-            source: {
-              relationTo: originalSlug,
-              value: doc.id,
-            },
-          },
-          overrideAccess: true,
-        }))
-
-      const externalId = link.externalId?.startsWith('ext_')
-        ? link.externalId
-        : `ext_${link.externalId || `${slug}_${link.id}`}`
-
       const url = `${siteUrl.replace(/\/$/, '')}/${slug}/${doc.slug}`
 
-      let tagMismatch = false
-      let urlMismatch = false
+      const existing = await getLink(dub, externalId)
 
-      if (existingShort) {
-        const currentDub = await dub.links.get({ externalId })
+      let folderId: string | undefined
 
-        const dubTagCurrent: string[] = Array.isArray(currentDub?.tags)
-          ? currentDub.tags.map((tag) => tag.id)
-          : []
+      if (isPro) {
+        const folders = await dub.folders.list()
 
-        tagMismatch =
-          dubTagIds.length !== dubTagCurrent.length ||
-          !dubTagIds.every((id) => dubTagCurrent.includes(id))
+        const folder =
+          folders.find((folder) => folder.name === slug) ||
+          (await dub.folders.create({ name: slug }))
 
-        urlMismatch = Boolean(currentDub?.url && currentDub.url !== url)
+        folderId = folder.id
       }
 
-      if (existingShort && !tagMismatch && !urlMismatch) {
-        return doc
-      }
+      const currentTagIds = existing?.tags?.map((tag) => tag.id) ?? []
+
+      const requiresUpdate =
+        !existing ||
+        existing.url !== url ||
+        !matches(currentTagIds, dubTagIds) ||
+        (domain !== undefined && existing.domain !== domain) ||
+        (folderId !== undefined && existing.folderId !== folderId) ||
+        (tid !== undefined && existing.tenantId !== tid)
 
       const data: DubTypes = {
         externalId,
-        ...(folderId ? { folderId } : {}),
         tagIds: dubTagIds,
         url,
         ...(domain ? { domain } : {}),
+        ...(folderId ? { folderId } : {}),
         ...(tid ? { tenantId: tid } : {}),
       }
 
-      const existing = await dub.links.get({ externalId }).catch(() => null)
-
       const updated = existing
-        ? await dub.links.update(externalId, data)
+        ? requiresUpdate
+          ? await dub.links.update(existing.id, data)
+          : existing
         : await dub.links.create(data)
 
+      const currentPayloadTagIds = Array.isArray(link.dubTags)
+        ? link.dubTags.map((tag) => (typeof tag === 'object' && tag !== null ? tag.id : tag))
+        : []
+
       const requiresSync =
-        !existingShort ||
-        existingShort !== updated.shortLink ||
-        tagMismatch ||
-        link.externalId !== externalId
+        link.externalId !== externalId ||
+        link.shortLink !== updated.shortLink ||
+        !matches(currentPayloadTagIds, payloadTagIds)
 
       if (requiresSync) {
         await payload.update({
           id: link.id,
           collection: 'dubLinks',
-          context: { skipDubHook: true },
+          context: { ...context, skipDubHook: true },
           data: {
             dubTags: payloadTagIds,
             externalId,
             shortLink: updated.shortLink,
           },
+          depth: 0,
           overrideAccess: true,
+          req,
         })
       }
     } catch (error) {
-      payload.logger.error({ error, message: 'Failed: Error creating/updating shortlink' })
+      payload.logger.error({
+        err: error,
+        msg: 'Failed to create or update Dub shortlink',
+      })
     }
 
     return doc
