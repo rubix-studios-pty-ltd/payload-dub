@@ -1,10 +1,12 @@
 import { type CollectionConfig, type CollectionSlug, type Field, type Plugin } from 'payload'
 import { Dub } from 'dub'
 
+import { getLinks } from './fields/links.js'
+import { getTags } from './fields/tags.js'
 import { createSingle } from './hooks/createSingle.js'
 import { manageLinks } from './hooks/manageLinks.js'
 import { manageTags } from './hooks/manageTags.js'
-import { DubColors, type DubConfig } from './types.js'
+import { type DubConfig } from './types.js'
 
 export const payloadDub =
   (pluginConfig: DubConfig): Plugin =>
@@ -32,67 +34,8 @@ export const payloadDub =
     const linkHooks = manageLinks(dub, tagsSlug)
     const tagHooks = manageTags(dub)
 
-    const linksFields: Field[] = [
-      {
-        name: 'externalId',
-        type: 'text',
-        admin: {
-          readOnly: true,
-        },
-        unique: true,
-      },
-      {
-        name: 'shortLink',
-        type: 'text',
-        admin: {
-          readOnly: true,
-        },
-        unique: true,
-      },
-      {
-        name: 'dubTags',
-        type: 'relationship',
-        hasMany: true,
-        relationTo: tagsSlug,
-      },
-      {
-        name: 'source',
-        type: 'relationship',
-        relationTo: sources,
-        required: true,
-      },
-    ]
-
-    const tagsFields: Field[] = [
-      {
-        name: 'tagID',
-        type: 'text',
-        access: {
-          read: () => true,
-          update: () => true,
-        },
-        admin: {
-          readOnly: true,
-        },
-        label: 'Tag ID',
-        unique: true,
-      },
-      {
-        name: 'name',
-        type: 'text',
-        required: true,
-        unique: true,
-      },
-      {
-        name: 'color',
-        type: 'select',
-        options: Object.values(DubColors).map((color) => ({
-          label: color.charAt(0).toUpperCase() + color.slice(1),
-          value: color,
-        })),
-        required: true,
-      },
-    ]
+    const linksFields = getLinks({ sources, tagsSlug })
+    const tagsFields = getTags()
 
     const dubLinks: CollectionConfig = {
       ...linksOverride,
