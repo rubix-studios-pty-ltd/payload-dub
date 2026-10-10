@@ -10,6 +10,19 @@ Dub is the modern, open-source link attribution platform for short links, conver
 
 Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 
+<img width="1912" height="914" alt="Link Analytics Dashboard" src="https://github.com/user-attachments/assets/a465f62a-6d9d-440d-a693-b0a10f9e9cdc" />
+
+## Compatibility
+
+The plugin maintains two release lines, with Payload CMS v4 as the primary release and Payload CMS v3 maintained separately.
+
+| Payload CMS | Plugin version | Release branch | npm dist-tag |
+| --- | --- | --- | --- |
+| v4 | 2.x | `main` | `latest` |
+| v3 | 1.x | `payload-v3` | `payload-v3` |
+
+Install the release matching your Payload version. The `latest` tag targets Payload v4 after the v4 release is published.
+
 ## Installation
 
 ```sh
@@ -59,6 +72,16 @@ export default buildConfig({
           },
         },
       },
+      dubAnalytics: {
+        overrides: {
+          access: {
+            read: ({ req }) => !!req.user,
+          },
+          admin: {
+            group: 'Marketing',
+          },
+        },
+      },
     }),
   ],
 })
@@ -76,6 +99,7 @@ If you do not provide optional overrides, the plugin defaults to:
 - **Automation**: Generates and updates shortlinks when documents are published or slugs change.
 - **Folders**: Collections are organised in folders (Pro).
 - **Tags**: Tags can be created and removed directly in Payload.
+- **Analytics**: Dashboard for campaign attribution, with advanced reporting (Pro).
 - **Sync**: Keeps Payload and Dub data consistent with minimal overhead.
 - **Configurable**: Supports per-collection overrides for color, slug, and URL base.
 - **Access Control**: Access, field and admin overrides for complete CMS control.
