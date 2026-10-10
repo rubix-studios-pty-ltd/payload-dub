@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# [1.9.0](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.6...v1.9.0) (2026-10-10)
+
+
+### Features
+
+* add dubAnalytics configuration and access control to Payload CMS ([563bdd9](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/563bdd90eef6035dc80fd1d477023263fb46a794))
+* add Payload CMS v4 compatibility and refactor plugin internals ([8bf62de](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/8bf62dea32cf4d640740a6f1ea8d2ac9df31e3d4))
+* marketing analytics Payload CMS v4 ([4be0c5f](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/4be0c5f4afb4a4513c7ccd44d06f30dc4eaea769))
+
 ## [1.8.6](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.5...v1.8.6) (2026-09-18)
 
 
