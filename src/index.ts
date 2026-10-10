@@ -1,4 +1,4 @@
-import { type CollectionConfig, type Config, type Field } from 'payload'
+import { type CollectionConfig, type CollectionSlug, type Field, type Plugin } from 'payload'
 import { Dub } from 'dub'
 
 import { createSingle } from './hooks/createSingle.js'
@@ -7,17 +7,30 @@ import { manageTags } from './hooks/manageTags.js'
 import { DubColors, type DubConfig } from './types.js'
 
 export const payloadDub =
-  (pluginConfig: DubConfig) =>
-  (incomingConfig: Config): Config => {
-    if (!pluginConfig.collections || pluginConfig.disabled) {
+  (pluginConfig: DubConfig): Plugin =>
+  (incomingConfig) => {
+    const enabled = pluginConfig.collections
+
+    if (pluginConfig.disabled || !enabled?.length) {
       return incomingConfig
     }
 
-    const enabled = pluginConfig.collections
+    const linksOverride = pluginConfig.dubCollection?.overrides
+    const tagsOverride = pluginConfig.dubTagCollection?.overrides
+
+    const linksSlug = (linksOverride?.slug || 'dubLinks') as CollectionSlug
+    const tagsSlug = (tagsOverride?.slug || 'dubTags') as CollectionSlug
+
+    const sources = [
+      ...new Set(
+        enabled.map((collection) => (typeof collection === 'string' ? collection : collection.docs))
+      ),
+    ]
+
     const dub = new Dub({ token: pluginConfig.dubApiKey })
 
+    const linkHooks = manageLinks(dub, tagsSlug)
     const tagHooks = manageTags(dub)
-    const linkHooks = manageLinks(dub)
 
     const linksFields: Field[] = [
       {
@@ -26,26 +39,26 @@ export const payloadDub =
         admin: {
           readOnly: true,
         },
-        required: false,
         unique: true,
       },
       {
         name: 'shortLink',
         type: 'text',
-        required: false,
+        admin: {
+          readOnly: true,
+        },
         unique: true,
       },
       {
         name: 'dubTags',
         type: 'relationship',
         hasMany: true,
-        relationTo: 'dubTags',
-        required: false,
+        relationTo: tagsSlug,
       },
       {
         name: 'source',
         type: 'relationship',
-        relationTo: pluginConfig.collections.map((c) => (typeof c === 'string' ? c : c.docs)),
+        relationTo: sources,
         required: true,
       },
     ]
@@ -62,7 +75,6 @@ export const payloadDub =
           readOnly: true,
         },
         label: 'Tag ID',
-        required: false,
         unique: true,
       },
       {
@@ -83,86 +95,76 @@ export const payloadDub =
     ]
 
     const dubLinks: CollectionConfig = {
-      ...(pluginConfig?.dubCollection?.overrides || {}),
-      slug: pluginConfig.dubCollection?.overrides?.slug || 'dubLinks',
+      ...linksOverride,
+      slug: linksSlug,
       access: {
         read: () => true,
         update: () => true,
-        ...(pluginConfig.dubCollection?.overrides?.access || {}),
+        ...linksOverride?.access,
       },
       admin: {
         group: 'Dub',
         useAsTitle: 'shortLink',
-        ...(pluginConfig.dubCollection?.overrides?.admin || {}),
+        ...linksOverride?.admin,
       },
-      fields:
-        pluginConfig.dubCollection?.overrides?.fields &&
-        typeof pluginConfig.dubCollection?.overrides?.fields === 'function'
-          ? pluginConfig.dubCollection?.overrides?.fields({ defaultFields: linksFields })
-          : linksFields,
+      fields: linksOverride?.fields
+        ? linksOverride.fields({ defaultFields: linksFields })
+        : linksFields,
       hooks: {
-        afterDelete: [linkHooks.afterDelete],
-        beforeChange: [linkHooks.beforeChange],
+        ...linksOverride?.hooks,
+        afterDelete: [...(linksOverride?.hooks?.afterDelete || []), linkHooks.afterDelete],
+        beforeChange: [...(linksOverride?.hooks?.beforeChange || []), linkHooks.beforeChange],
       },
       labels: {
         plural: 'Links',
         singular: 'Link',
+        ...linksOverride?.labels,
       },
     }
 
     const dubTags: CollectionConfig = {
-      ...(pluginConfig.dubTagCollection?.overrides || {}),
-      slug: pluginConfig.dubTagCollection?.overrides?.slug || 'dubTags',
+      ...tagsOverride,
+      slug: tagsSlug,
       access: {
         read: () => true,
         update: () => true,
-        ...(pluginConfig.dubTagCollection?.overrides?.access || {}),
+        ...tagsOverride?.access,
       },
       admin: {
         group: 'Dub',
         useAsTitle: 'name',
-        ...(pluginConfig.dubTagCollection?.overrides?.admin || {}),
+        ...tagsOverride?.admin,
       },
-      fields:
-        pluginConfig.dubTagCollection?.overrides?.fields &&
-        typeof pluginConfig.dubTagCollection?.overrides?.fields === 'function'
-          ? pluginConfig.dubTagCollection?.overrides?.fields({ defaultFields: tagsFields })
-          : tagsFields,
+      fields: tagsOverride?.fields
+        ? tagsOverride.fields({ defaultFields: tagsFields })
+        : tagsFields,
       hooks: {
-        afterDelete: [tagHooks.afterDelete],
-        beforeChange: [tagHooks.beforeChange],
+        ...tagsOverride?.hooks,
+        afterDelete: [...(tagsOverride?.hooks?.afterDelete || []), tagHooks.afterDelete],
+        beforeChange: [...(tagsOverride?.hooks?.beforeChange || []), tagHooks.beforeChange],
       },
       labels: {
         plural: 'Tags',
         singular: 'Tag',
+        ...tagsOverride?.labels,
       },
     }
 
-    const incomingCollections = incomingConfig.collections || []
-
-    const updatedCollections: CollectionConfig[] = [...incomingCollections, dubLinks, dubTags]
-
-    const collectionsWithHooks = updatedCollections.map((collection) => {
-      const configMatch = enabled.find((col) =>
-        typeof col === 'string' ? col === collection.slug : col.docs === collection.slug
+    const collections = (incomingConfig.collections || []).map((collection): CollectionConfig => {
+      const match = enabled.find((item) =>
+        typeof item === 'string' ? item === collection.slug : item.docs === collection.slug
       )
 
-      if (!configMatch) {
+      if (!match) {
         return collection
       }
 
-      let targetSlug: string
+      const targetSlug = typeof match === 'string' ? match : match.slugOverride || match.docs
 
-      if (typeof configMatch === 'string') {
-        targetSlug = configMatch
-      } else {
-        targetSlug = configMatch.slugOverride || configMatch.docs
-      }
+      const fields: Field[] = [...collection.fields]
 
-      const attachFields = [...(collection.fields || [])]
-
-      if (!attachFields.some((field) => 'name' in field && field.name === 'dubLink')) {
-        attachFields.push({
+      if (!fields.some((field) => 'name' in field && field.name === 'dubLink')) {
+        fields.push({
           name: 'dubLink',
           type: 'text',
           admin: {
@@ -172,22 +174,43 @@ export const payloadDub =
           hooks: {
             afterRead: [
               async ({ originalDoc, req }) => {
-                try {
-                  if (!originalDoc?.id) {
-                    return ''
-                  }
+                if (originalDoc?.id === undefined || originalDoc.id === null) {
+                  return ''
+                }
 
-                  const dubDoc = await req.payload.find({
-                    collection: 'dubLinks',
+                try {
+                  const result = await req.payload.find({
+                    collection: linksSlug,
+                    depth: 0,
                     limit: 1,
                     overrideAccess: true,
+                    req,
+                    select: {
+                      shortLink: true,
+                    },
                     where: {
-                      'source.value': { equals: originalDoc.id },
+                      and: [
+                        {
+                          'source.relationTo': {
+                            equals: collection.slug,
+                          },
+                        },
+                        {
+                          'source.value': {
+                            equals: originalDoc.id,
+                          },
+                        },
+                      ],
                     },
                   })
 
-                  return dubDoc?.docs?.[0]?.shortLink || ''
-                } catch {
+                  return result.docs[0]?.shortLink || ''
+                } catch (error) {
+                  req.payload.logger.error({
+                    err: error,
+                    msg: 'Failed to read Dub shortlink',
+                  })
+
                   return ''
                 }
               },
@@ -196,8 +219,8 @@ export const payloadDub =
         })
       }
 
-      if (!attachFields.some((field) => 'name' in field && field.name === 'dubTags')) {
-        attachFields.push({
+      if (!fields.some((field) => 'name' in field && field.name === 'dubTags')) {
+        fields.push({
           name: 'dubTags',
           type: 'relationship',
           admin: {
@@ -205,25 +228,26 @@ export const payloadDub =
             position: 'sidebar',
           },
           hasMany: true,
-          relationTo: 'dubTags',
-          required: false,
+          relationTo: tagsSlug,
         })
       }
 
       return {
         ...collection,
-        fields: attachFields,
+        fields,
         hooks: {
-          ...(collection.hooks || {}),
+          ...collection.hooks,
           afterChange: [
             ...(collection.hooks?.afterChange || []),
             createSingle({
               slug: targetSlug,
               domain: pluginConfig.domain,
               dub,
-              isPro: pluginConfig.isPro || false,
+              isPro: pluginConfig.isPro,
+              linksSlug,
               originalSlug: collection.slug,
               siteUrl: pluginConfig.siteUrl,
+              tagsSlug,
               tenantId: pluginConfig.tenantId,
             }),
           ],
@@ -233,6 +257,6 @@ export const payloadDub =
 
     return {
       ...incomingConfig,
-      collections: collectionsWithHooks,
+      collections: [...collections, dubLinks, dubTags],
     }
   }
