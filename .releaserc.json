@@ -11,7 +11,13 @@
     [
       "@semantic-release/commit-analyzer",
       {
-        "preset": "conventionalcommits"
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          {
+            "type": "feat",
+            "release": "patch"
+          }
+        ]
       }
     ],
     "@semantic-release/release-notes-generator",
@@ -35,6 +41,11 @@
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    "@semantic-release/github"
+    [
+      "@semantic-release/github",
+      {
+        "failComment": false
+      }
+    ]
   ]
 }
