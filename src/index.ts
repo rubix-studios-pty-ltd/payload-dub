@@ -30,7 +30,10 @@ export const payloadDub =
       ),
     ]
 
-    const dub = new Dub({ token: pluginConfig.dubApiKey })
+    const dub = new Dub({
+      token: pluginConfig.dubApiKey,
+      serverURL: pluginConfig.baseUrl,
+    })
 
     const linkHooks = manageLinks(dub, tagsSlug)
     const tagHooks = manageTags(dub)
