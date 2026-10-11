@@ -37,6 +37,7 @@ import { payloadDub } from '@rubixstudios/payload-dub'
 export default buildConfig({
   plugins: [
     payloadDub({
+      baseUrl: process.env.BASE_URL!, // Optional: self hosted Dub url
       collections: [
         { docs: 'posts', slugOverride: 'post' }, // Custom slug used for folder and shortlinks
         { docs: 'insights', slugOverride: 'insight' }, // Custom slug only

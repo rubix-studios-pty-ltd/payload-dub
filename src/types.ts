@@ -52,6 +52,7 @@ type CollectionOverride = Partial<Omit<CollectionConfig, 'fields'>> & {
 }
 
 export type DubConfig = {
+  baseUrl?: string
   collections?: DubCollection[]
   disabled?: boolean
   domain?: string
