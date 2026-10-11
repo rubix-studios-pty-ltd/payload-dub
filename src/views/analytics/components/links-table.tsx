@@ -89,11 +89,7 @@ export function LinksTable({ links }: { links: Link[] }) {
 
   return (
     <>
-      <Table
-        ariaLabel="Managed Dub links"
-        columns={columns}
-        data={visible.map((item) => ({ ...item }))}
-      />
+      <Table columns={columns} data={visible.map((item) => ({ ...item }))} />
 
       {links.length > visible.length && (
         <p className={`${styleSlug}__table-note`}>
