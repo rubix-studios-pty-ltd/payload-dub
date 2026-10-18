@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.1...v2.0.2) (2026-10-18)
+
+
+### Bug Fixes
+
+* **readme:** update environment variable for Dub base URL ([031fb22](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/031fb22f02e720e6a14ca745667491e7a962775c))
+
 ## [2.0.1](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.0...v2.0.1) (2026-10-11)
 
 
