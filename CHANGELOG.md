@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.9](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.8...v1.8.9) (2026-10-23)
+
+
+### Bug Fixes
+
+* **sec:** Node - CVE-2026-111497 ([e1528cf](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/e1528cf3be473c4dcad1cdabf61f0741dfb09a13))
+
 ## [1.8.8](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.7...v1.8.8) (2026-10-23)
 
 ### Bug Fixes
