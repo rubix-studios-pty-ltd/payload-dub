@@ -98,5 +98,5 @@
     "dub": "^0.74.0",
     "recharts": "^3.10.1"
   },
-  "packageManager": "pnpm@12.14.0"
+  "packageManager": "pnpm@12.15.0"
 }
