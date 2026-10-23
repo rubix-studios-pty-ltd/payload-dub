@@ -17,9 +17,9 @@ Create a free Dub account: [Dub](https://refer.dub.co/rubixstudios)
 The plugin maintains two release lines, with Payload CMS v4 as the primary release and Payload CMS v3 maintained separately.
 
 | Payload CMS | Plugin version | Release branch | npm dist-tag |
-| --- | --- | --- | --- |
-| v4 | 2.x | `main` | `latest` |
-| v3 | 1.x | `payload-v3` | `payload-v3` |
+| ----------- | -------------- | -------------- | ------------ |
+| v4          | 2.x            | `main`         | `latest`     |
+| v3          | 1.x            | `payload-v3`   | `payload-v3` |
 
 Install the release matching your Payload version. The `latest` tag targets Payload v4 after the v4 release is published.
 
@@ -80,7 +80,6 @@ export default buildConfig({
 ## Notes
 
 If you do not provide optional overrides, the plugin defaults to:
-
 - Links readable by all
 - Tags are readable, editable, and deletable by all logged in users
 
@@ -100,7 +99,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For support or inquiries:
-
 - LinkedIn: [rubixvi](https://www.linkedin.com/in/rubixvi/)
 - Website: [Rubix Studios](https://rubixstudios.com.au)
 
