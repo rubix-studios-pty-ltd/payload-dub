@@ -7,10 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.8.8](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.7...v1.8.8) (2026-10-23)
 
-
 ### Bug Fixes
 
-* **sec:** upstream security patch release. ([cf2fa14](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/cf2fa147aa93757e35f029689633ab69e1e2f30a))
+- **sec:** upstream security patch release. ([cf2fa14](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/cf2fa147aa93757e35f029689633ab69e1e2f30a))
 
 ## [1.8.7](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.6...v1.8.7) (2026-10-10)
 
