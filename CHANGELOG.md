@@ -23,7 +23,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - github asset release ([6093186](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/60931860ef4ee0e5852c9f2d9940c0c5287a29c1))
 
-
 ### Features
 
 - streamline plugin configuration and enhance tag management ([1d7a190](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/1d7a190532b1b1d4bf236fdb830e912df280d119))
@@ -73,7 +72,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **deps:** update pnpm version and graphql dependency; add pnpm workspace configuration ([0c6bccb](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/0c6bccb8ad0be083e2ba288ac4ea7cc51dbc691f))
 - release pipeline and update packages ([3006463](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/30064634c06d7c06f18278f6893d04bed4074767))
 - **release:** update branch name from 'development' to 'dev' ([124d79f](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/124d79fd985b388c6d04271b55edd7c6af396384))
-
 
 ### Features
 
@@ -176,7 +174,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Bug Fixes
 
 - **docs:** update README for clarity and consistency; remove payload-types from eslint config ([7f507f7](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/7f507f7ebbb658ecaaf8aaf8c111bd54dc4f1801))
-
 
 ### Features
 
