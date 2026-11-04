@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.10](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.9...v1.8.10) (2026-11-04)
+
+
+### Features
+
+* **sec:** bump mini payload ([f64a576](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/f64a576439675a783a597f7d66b65c4a0541d209))
+
 ## [1.8.9](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.8...v1.8.9) (2026-10-23)
 
 ### Bug Fixes
