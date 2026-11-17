@@ -60,7 +60,7 @@ export const createSingle =
       const link =
         lookup.docs[0] ||
         (await payload.create({
-          collection: tagsSlug,
+          collection: linksSlug,
           context: { ...context, skipDubHook: true },
           data: {
             source: {
