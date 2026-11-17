@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.10](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.9...v2.0.10) (2026-11-17)
+
+### Bug Fixes
+
+* lookup on links instead of tags regression ([628dd02](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/628dd024ffa67ea267f95af4a1e73de776230bf0))
+
 ## [2.0.9](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.8...v2.0.9) (2026-11-14)
 
 
