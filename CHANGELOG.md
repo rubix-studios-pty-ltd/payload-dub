@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Bug Fixes
 
-* lookup regression on links ([be4ed1b](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/be4ed1b31c2bd1e646841443100282b328fd7d82))
-* minimum node version ([a562a01](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/a562a01b521725d070a5169486dbc6e8c9773436))
-* node version minimum ([de4519e](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/de4519ec0bceac16013b0d3ea758ffeaf8f5bf3e))
+- lookup regression on links ([be4ed1b](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/be4ed1b31c2bd1e646841443100282b328fd7d82))
+- minimum node version ([a562a01](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/a562a01b521725d070a5169486dbc6e8c9773436))
+- node version minimum ([de4519e](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/de4519ec0bceac16013b0d3ea758ffeaf8f5bf3e))
 
 ## [1.8.12](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v1.8.11...v1.8.12) (2026-11-12)
 
