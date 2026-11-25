@@ -120,7 +120,7 @@ export async function remoteLinks(dub: Dub, locals: LocalLink[], tenantId?: stri
     for (const { local, remote } of results) {
       if (!remote?.id) continue
 
-      if (normalizedTenantId && remote.tenantId && remote.tenantId !== normalizedTenantId) {
+      if (normalizedTenantId && remote.tenantId !== normalizedTenantId) {
         continue
       }
 
