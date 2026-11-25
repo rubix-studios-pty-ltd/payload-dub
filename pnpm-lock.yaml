@@ -190,14 +190,14 @@ importers:
         version: 0.75.0
       recharts:
         specifier: ^3.11.1
-        version: 3.11.1(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react-is@16.13.1)(react@19.3.1)(redux@5.0.1)
+        version: 3.11.1(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react-is@16.13.1)(react@19.3.1)(redux@5.0.1)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.6.9
         version: 2.6.9
       '@payloadcms/ui':
         specifier: ^4.0.0-beta.12
-        version: 4.0.0-internal.ff27d6e(@types/react@19.3.0)(monaco-editor@0.57.0)(payload@4.0.0-internal.ff27d6e(graphql@16.15.0)(supports-color@7.2.0)(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)(typescript@7.0.2)
+        version: 4.0.0-internal.ff27d6e(@types/react@19.3.1)(monaco-editor@0.57.0)(payload@4.0.0-internal.ff27d6e(graphql@16.15.0)(supports-color@7.2.0)(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)(typescript@7.0.2)
       '@semantic-release/changelog':
         specifier: ^7.0.0
         version: 7.0.0(semantic-release@26.0.1(supports-color@7.2.0))
@@ -211,8 +211,8 @@ importers:
         specifier: ^1.16.22
         version: 1.16.22(@swc/helpers@0.5.24)
       '@types/react':
-        specifier: ^19.3.0
-        version: 19.3.0
+        specifier: ^19.3.1
+        version: 19.3.1
       clean-css-cli:
         specifier: ^5.6.3
         version: 5.6.3
@@ -1123,8 +1123,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
 
-  '@types/react@19.3.0':
-    resolution: {integrity: sha512-N0rFCuH9YoxG9/m61l9MfpJKfmLOVU0em7ipIz6TRgSSkvReLB9vL85GB+yr8Bs5leqpvg96JSwF4ZS1s4viQg==}
+  '@types/react@19.3.1':
+    resolution: {integrity: sha512-HNTkBIm8zmHX8LUXX2vtZ/ONzehrV1J3abl2fUIiZ5qxTYRCj/z+rDeFwOltqCLl9lRdUTKWT41OLtYuFV/Arg==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -3441,7 +3441,7 @@ snapshots:
 
   '@emotion/memoize@0.9.0': {}
 
-  '@emotion/react@11.14.0(@types/react@19.3.0)(react@19.3.1)(supports-color@7.2.0)':
+  '@emotion/react@11.14.0(@types/react@19.3.1)(react@19.3.1)(supports-color@7.2.0)':
     dependencies:
       '@babel/runtime': 7.29.14
       '@emotion/babel-plugin': 11.13.5(supports-color@7.2.0)
@@ -3453,7 +3453,7 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
     transitivePeerDependencies:
       - supports-color
 
@@ -3778,7 +3778,7 @@ snapshots:
     dependencies:
       date-fns: 4.4.0
 
-  '@payloadcms/ui@4.0.0-internal.ff27d6e(@types/react@19.3.0)(monaco-editor@0.57.0)(payload@4.0.0-internal.ff27d6e(graphql@16.15.0)(supports-color@7.2.0)(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)(typescript@7.0.2)':
+  '@payloadcms/ui@4.0.0-internal.ff27d6e(@types/react@19.3.1)(monaco-editor@0.57.0)(payload@4.0.0-internal.ff27d6e(graphql@16.15.0)(supports-color@7.2.0)(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)(typescript@7.0.2)':
     dependencies:
       '@date-fns/tz': 1.2.0
       '@dnd-kit/core': 6.3.1(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -3805,7 +3805,7 @@ snapshots:
       react-datepicker: 9.1.0(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       react-dom: 19.3.1(react@19.3.1)
       react-image-crop: 10.1.8(react@19.3.1)
-      react-select: 5.9.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)
+      react-select: 5.9.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0)
       scheduler: 0.25.0
       sonner: 1.7.4(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       ts-essentials: 10.0.3(typescript@7.0.2)
@@ -3832,7 +3832,7 @@ snapshots:
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
 
-  '@reduxjs/toolkit@2.15.0(@types/react@19.3.0)(react-redux@9.3.1(@types/react@19.3.0)(react@19.3.1)(redux@5.0.1))(react@19.3.1)':
+  '@reduxjs/toolkit@2.15.0(@types/react@19.3.1)(react-redux@9.3.1(@types/react@19.3.1)(react@19.3.1)(redux@5.0.1))(react@19.3.1)':
     dependencies:
       '@standard-schema/spec': 1.1.0
       '@standard-schema/utils': 0.3.0
@@ -3841,9 +3841,9 @@ snapshots:
       redux-thunk: 3.1.0(redux@5.0.1)
       reselect: 5.2.0
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       react: 19.3.1
-      react-redux: 9.3.1(@types/react@19.3.0)(react@19.3.1)(redux@5.0.1)
+      react-redux: 9.3.1(@types/react@19.3.1)(react@19.3.1)(redux@5.0.1)
 
   '@sec-ant/readable-stream@0.4.1': {}
 
@@ -4113,11 +4113,11 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/react-transition-group@4.4.12(@types/react@19.3.0)':
+  '@types/react-transition-group@4.4.12(@types/react@19.3.1)':
     dependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
-  '@types/react@19.3.0':
+  '@types/react@19.3.1':
     dependencies:
       csstype: 3.2.4
 
@@ -5527,28 +5527,28 @@ snapshots:
 
   react-is@16.13.1: {}
 
-  react-redux@9.3.1(@types/react@19.3.0)(react@19.3.1)(redux@5.0.1):
+  react-redux@9.3.1(@types/react@19.3.1)(react@19.3.1)(redux@5.0.1):
     dependencies:
       '@types/use-sync-external-store': 0.0.6
       react: 19.3.1
       use-sync-external-store: 1.7.0(react@19.3.1)
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
       redux: 5.0.1
 
-  react-select@5.9.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0):
+  react-select@5.9.0(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(supports-color@7.2.0):
     dependencies:
       '@babel/runtime': 7.29.14
       '@emotion/cache': 11.14.0
-      '@emotion/react': 11.14.0(@types/react@19.3.0)(react@19.3.1)(supports-color@7.2.0)
+      '@emotion/react': 11.14.0(@types/react@19.3.1)(react@19.3.1)(supports-color@7.2.0)
       '@floating-ui/dom': 1.7.6
-      '@types/react-transition-group': 4.4.12(@types/react@19.3.0)
+      '@types/react-transition-group': 4.4.12(@types/react@19.3.1)
       memoize-one: 6.0.0
       prop-types: 15.8.1
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
       react-transition-group: 4.4.5(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      use-isomorphic-layout-effect: 1.2.1(@types/react@19.3.0)(react@19.3.1)
+      use-isomorphic-layout-effect: 1.2.1(@types/react@19.3.1)(react@19.3.1)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
@@ -5610,9 +5610,9 @@ snapshots:
 
   real-require@1.0.0: {}
 
-  recharts@3.11.1(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react-is@16.13.1)(react@19.3.1)(redux@5.0.1):
+  recharts@3.11.1(@types/react@19.3.1)(react-dom@19.3.1(react@19.3.1))(react-is@16.13.1)(react@19.3.1)(redux@5.0.1):
     dependencies:
-      '@reduxjs/toolkit': 2.15.0(@types/react@19.3.0)(react-redux@9.3.1(@types/react@19.3.0)(react@19.3.1)(redux@5.0.1))(react@19.3.1)
+      '@reduxjs/toolkit': 2.15.0(@types/react@19.3.1)(react-redux@9.3.1(@types/react@19.3.1)(react@19.3.1)(redux@5.0.1))(react@19.3.1)
       clsx: 2.1.1
       decimal.js-light: 2.5.1
       es-toolkit: 1.53.2
@@ -5621,13 +5621,13 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
       react-is: 16.13.1
-      react-redux: 9.3.1(@types/react@19.3.0)(react@19.3.1)(redux@5.0.1)
+      react-redux: 9.3.1(@types/react@19.3.1)(react@19.3.1)(redux@5.0.1)
       reselect: 5.2.0
       tiny-invariant: 1.3.3
       use-sync-external-store: 1.7.0(react@19.3.1)
       victory-vendor: 37.4.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
     transitivePeerDependencies:
       - redux
 
@@ -6035,11 +6035,11 @@ snapshots:
       react: 19.3.1
       scheduler: 0.25.0
 
-  use-isomorphic-layout-effect@1.2.1(@types/react@19.3.0)(react@19.3.1):
+  use-isomorphic-layout-effect@1.2.1(@types/react@19.3.1)(react@19.3.1):
     dependencies:
       react: 19.3.1
     optionalDependencies:
-      '@types/react': 19.3.0
+      '@types/react': 19.3.1
 
   use-sync-external-store@1.7.0(react@19.3.1):
     dependencies:
