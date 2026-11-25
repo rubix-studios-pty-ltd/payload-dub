@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.13](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.12...v2.0.13) (2026-11-25)
+
+### Bug Fixes
+
+* **remote:** simplify tenant ID check in remoteLinks function ([5a7c07c](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/5a7c07cab4251e6d0704736933d643739d20ad0b))
+* respect configured Dub server URL in analytics client ([ce031ca](https://github.com/rubix-studios-pty-ltd/payload-dub/commit/ce031ca69019c48149a4f4398eacc002a49fa29f))
+
 ## [2.0.12](https://github.com/rubix-studios-pty-ltd/payload-dub/compare/v2.0.11...v2.0.12) (2026-11-24)
 
 ### Bug Fixes
