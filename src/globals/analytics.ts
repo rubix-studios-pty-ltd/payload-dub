@@ -1,6 +1,7 @@
 import { type CollectionSlug, type GlobalConfig } from 'payload'
 
 type Props = {
+  baseUrl?: string
   dubApiKey: string
   isPro?: boolean
   linksSlug: CollectionSlug
@@ -9,6 +10,7 @@ type Props = {
 }
 
 export function getAnalytics({
+  baseUrl,
   dubApiKey,
   isPro = false,
   linksSlug,
@@ -33,6 +35,7 @@ export function getAnalytics({
               Component: {
                 path: '@rubixstudios/payload-dub/analytics#DubAnalytics',
                 serverProps: {
+                  baseUrl,
                   dubApiKey,
                   isPro,
                   linksSlug,

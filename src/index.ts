@@ -203,6 +203,7 @@ export const payloadDub =
     })
 
     const analytics = getAnalytics({
+      baseUrl: pluginConfig.baseUrl,
       dubApiKey: pluginConfig.dubApiKey,
       isPro: pluginConfig.isPro,
       linksSlug,

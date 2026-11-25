@@ -9,6 +9,7 @@ import { RANGES, type Range, type Report } from './types.js'
 import './styles.css'
 
 type Props = DocumentViewServerProps & {
+  baseUrl?: string
   dubApiKey: string
   isPro?: boolean
   linksSlug: CollectionSlug
@@ -18,6 +19,7 @@ type Props = DocumentViewServerProps & {
 export async function DubAnalytics({
   initPageResult,
   searchParams,
+  baseUrl,
   dubApiKey,
   isPro = false,
   linksSlug,
@@ -44,7 +46,10 @@ export async function DubAnalytics({
 
   try {
     report = await loadReport({
-      dub: new Dub({ token: dubApiKey }),
+      dub: new Dub({
+        token: dubApiKey,
+        serverURL: baseUrl,
+      }),
       payload: req.payload,
       req,
       linksSlug,
