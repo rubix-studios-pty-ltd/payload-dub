@@ -96,7 +96,7 @@
   },
   "dependencies": {
     "dub": "^0.75.0",
-    "recharts": "^3.11.1"
+    "recharts": "^3.11.2"
   },
   "packageManager": "pnpm@12.23.0"
 }
